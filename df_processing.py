@@ -58,6 +58,9 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
 
 def merge_possession_to_df(players_df: pd.DataFrame, teams_df: pd.DataFrame) -> pd.DataFrame:
     
+    # drop existing 'team_poss' column if exists
+    players_df = players_df.drop(columns='team_poss', errors='ignore')
+
     # add team possession column to players dataframe
     teams_df = teams_df.drop(columns='division')
     players_df = pd.merge(players_df, teams_df, on='club', how='left')
@@ -85,8 +88,42 @@ def normalize_metrics(df: pd.DataFrame) -> pd.DataFrame:
 
 def add_custom_metrics(df: pd.DataFrame) -> pd.DataFrame:
 
-    df['net_poss_90'] = df['poss_won_90'] - df['poss_lost_90']          # net possession gain per 90
-    df['def_act_90'] = df['tck_a_90'] + df['int_90'] + df['fls_90']     # defensive actions per 90
-    df['pres_r'] = round(df['pres_c_90'] / df['pres_a_90'], 2)
+    df['net_poss_90'] = df['poss_won_90'] - df['poss_lost_90']              # net possession gain per 90
+    df['def_act_90'] = df['tck_a_90'] + df['int_90'] + df['fls_90']         # defensive actions per 90
+    df['pres_r'] = round(df['pres_c_90'] / df['pres_a_90'], 2)              # pressure success %
+    df['pr_passes_r'] = round(df['pr_passes_90'] / df['ps_c_90'] * 100, 2)  # ratio of progressive passes to passes completed 
+
+    return df
+
+def add_poss_adjusted_metrics(df: pd.DataFrame) -> pd.DataFrame:
+    if 'team_poss' not in df.columns:
+        # Return the original DataFrame if 'team_poss' column is missing
+        return df
+
+    metrics_to_adjust = [
+        'def_act_90',
+        'poss_won_90',
+        'pres_a_90',
+        'blk_90',
+        'int_90',
+        'k_tck_90',
+        'tck_90',
+    ]
+    
+    # Filter metrics that exist in the DataFrame
+    metrics_to_adjust = [m for m in metrics_to_adjust if m in df.columns]
+
+    if not metrics_to_adjust:
+        # No metrics to adjust, return the DataFrame as is
+        return df
+
+    # Precompute the adjustment factor to avoid recomputation
+    team_poss = df['team_poss']
+    adjustment_factor = 2 / (1 + np.exp(-0.1 * (team_poss * 100 - 50)))
+
+    # Add adjusted metrics
+    for metric in metrics_to_adjust:
+        adj_col = f'padj_{metric}'
+        df[adj_col] = round(df[metric] * adjustment_factor, 2)
 
     return df

@@ -1,3 +1,4 @@
-streamlit
-pandas
-lxml
+streamlit==1.41.1
+pandas==2.2.3
+lxml==5.3.0
+mplsoccer==1.4.0

@@ -2,13 +2,20 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+from df_processing import *
+
 # maybe break leagues into seperate tables for ease of input
 
 def input_poss_table() -> pd.DataFrame:
     
     assert 'players_df' in st.session_state
     players_df : pd.DataFrame = st.session_state['players_df']
-    teams_df = players_df[['club', 'division']].drop_duplicates().sort_values(['division', 'club']).reset_index(drop=True)
+    teams_df = (
+        players_df[['club', 'division']]
+        .drop_duplicates()
+        .sort_values(['division', 'club'])
+        .reset_index(drop=True)
+    )    
     teams_df['poss'] = 50
 
     
@@ -85,10 +92,18 @@ def input_poss_page():
     if isinstance(uploaded_teams_df, pd.DataFrame):
         final_teams_df = uploaded_teams_df
     else:
-        filled_teams_df = filled_teams_df
-        
-    st.session_state['teams_df'] = final_teams_df
+        final_teams_df = filled_teams_df
 
     st.write('##### Final possession table')
     st.write(final_teams_df)
+
+    # merge team possession to players dataframe
+    players_df = st.session_state['players_df']
+    players_df = merge_possession_to_df(players_df, final_teams_df)
+    players_df = add_poss_adjusted_metrics(players_df)
+
+    st.write(players_df)
+
+    # update players df
+    st.session_state['players_df'] = players_df
     

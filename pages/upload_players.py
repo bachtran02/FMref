@@ -43,7 +43,14 @@ def upload_players_page():
     df = raw_df.copy()
     df = preprocess_df(df)
 
-    st.write('Dataframe after preprocessing:')
+    # only include players with at least 450 minutes
+    df = df[df['mins'] >= 450]
+
+    # further processing
+    df = normalize_metrics(df)
+    df = add_custom_metrics(df)
+
+    # st.write('Dataframe after preprocessing:')
     st.write(df)
 
     # Store the processed data in session_state
