@@ -6,6 +6,9 @@ from utils import *
 
 def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
 
+    # drop rows with no player UID
+    df = df.dropna(subset=['UID'])
+
     # sanity check to ensure all the necessary fields are included
     required_fields = list(nonnumeric_fields_to_cc.keys()) + list(numeric_fields_to_cc.keys())
     missing_fields = [f for f in required_fields if f not in df.columns]

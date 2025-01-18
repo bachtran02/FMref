@@ -46,7 +46,7 @@ PER90_METRICS = {
     'hdr_r':            {'type': 'def', 'display': 'Headers\nWon %'},
     'hdrs_w_90':        {'type': 'def', 'display': 'Headers\nWon'},
     'hdrs_l_90':        {'type': 'def', 'display': 'Headers\nLost'},
-    'k_hrds_90':        {'type': 'def', 'display': 'Key Headers'},
+    'k_hdrs_90':        {'type': 'def', 'display': 'Key Headers'},
     'pres_a_90':        {'type': 'def', 'display': 'Pressures\nAttempted'},
     'pres_c_90':        {'type': 'def', 'display': 'Pressures\nCompleted'},
     'sprints_90':       {'type': 'def', 'display': 'High-intensity\nSprints'},
