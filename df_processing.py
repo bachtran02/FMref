@@ -9,6 +9,7 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
     # drop rows with no player UID
     df = df.dropna(subset=['UID'])
 
+    # TODO: improve this
     # sanity check to ensure all the necessary fields are included
     required_fields = list(nonnumeric_fields_to_cc.keys()) + list(numeric_fields_to_cc.keys())
     missing_fields = [f for f in required_fields if f not in df.columns]
@@ -27,9 +28,10 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
     df = df.set_index('uid')
     
     # 'Rec' and 'Info' are not useful
-    # 'Dist/90' are not exported correctly by FM24 (all zeros)
+    # 'Dist/90' is not exported correctly by FM24 (all zeros)
     df = df.drop(columns=['rec', 'inf', 'dist_90'])
 
+    # TODO: improve this
     # Replace missing stats with 0s
     # Note: in Football Manager - ~ 0
     df = df.replace('-', 0)
