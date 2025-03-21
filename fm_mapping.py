@@ -1,20 +1,49 @@
-nonnumeric_fields_to_cc = {
-    'Age': 'age',
-    'Best Pos': 'best_pos',
-    'Club': 'club',
-    'Division': 'division',
-    'Inf': 'inf',
-    'Name': 'name',
-    'Nat': 'nat',
-    'Position': 'position',
-    'Preferred Foot': 'preferred_foot',
-    'Rec': 'rec',
-    'Salary': 'salary',
-    'Transfer Value': 'transfer_value',
-    'UID': 'uid'
-}
+PLAYER_AGE                  = 'Age'
+PLAYER_BEST_POSITION        = 'Best Pos'
+PLAYER_CLUB                 = 'Club'
+PLAYER_DIVISION             = 'Division'
+PLAYER_NAME                 = 'Name'
+PLAYER_NAT                  = 'Nat'
+PLAYER_POSITION             = 'Position'
+PLAYER_PREFERRED_FOOT       = 'Preferred Foot'
+PLAYER_SALARY               = 'Salary'
+PLAYER_TRANSFER_VALUE       = 'Transfer Value'
+PLAYER_UID                  = 'UID'
 
-numeric_fields_to_cc = {
+PLAYER_HEIGHT = 'Height'
+PLAYER_WEIGHT = 'Weight'
+
+PLAYER_BASE_INFO = (
+    PLAYER_AGE,
+    PLAYER_BEST_POSITION,
+    PLAYER_CLUB,
+    PLAYER_DIVISION,
+    PLAYER_NAME,
+    PLAYER_NAT,
+    PLAYER_POSITION,
+    PLAYER_PREFERRED_FOOT,
+    PLAYER_SALARY,
+    PLAYER_TRANSFER_VALUE,
+    PLAYER_UID
+)
+
+# player_base_info_fields = {
+#     'Age': 'age',
+#     'Best Pos': 'best_pos',
+#     'Club': 'club',
+#     'Division': 'division',
+#     'Inf': 'inf',
+#     'Name': 'name',
+#     'Nat': 'nat',
+#     'Position': 'position',
+#     'Preferred Foot': 'preferred_foot',
+#     'Rec': 'rec',
+#     'Salary': 'salary',
+#     'Transfer Value': 'transfer_value',
+#     'UID': 'uid'
+# }
+
+player_metric_fields = {
     'Aer A/90': 'aer_a_90',
     'Ast': 'ast',
     'Asts/90': 'asts_90',
@@ -72,73 +101,73 @@ numeric_fields_to_cc = {
     'xG-OP': 'xg_op',
 }
 
-nonnumeric_cc_to_fields = {
-    'age': 'Age',
-    'best_pos': 'Best Pos',
-    'club': 'Club',
-    'division': 'Division',
-    'name': 'Name',
-    'nat': 'Nat',
-    'position': 'Position',
-    'preferred_foot': 'Preferred Foot',
-    'salary': 'Salary',
-    'transfer_value': 'Transfer Value',
-}
+# nonnumeric_cc_to_fields = {
+#     'age': 'Age',
+#     'best_pos': 'Best Pos',
+#     'club': 'Club',
+#     'division': 'Division',
+#     'name': 'Name',
+#     'nat': 'Nat',
+#     'position': 'Position',
+#     'preferred_foot': 'Preferred Foot',
+#     'salary': 'Salary',
+#     'transfer_value': 'Transfer Value',
+# }
 
-numeric_cc_to_fields = {
-    'aer_a_90': 'Aer A/90',
-    'ast': 'Ast',
-    'asts_90': 'Asts/90',
-    'av_rat': 'Av Rat',
-    'blk_90': 'Blk/90',
-    'ch_c_90': 'Ch C/90',
-    'clr_90': 'Clr/90',
-    'conv_r': 'Conv %',
-    'dist': 'Distance',
-    'dist_90': 'Dist/90',
-    'drb_90': 'Drb/90',
-    'fa': 'FA',
-    'fls': 'Fls',
-    'gl_mst': 'Gl Mst',
-    'gls': 'Gls',
-    'gls_90': 'Gls/90',
-    'hdr_r': 'Hdr %',
-    'hdrs_l_90': 'Hdrs L/90',
-    'hdrs_w_90': 'Hdrs W/90',
-    'height': 'Height',
-    'int_90': 'Int/90',
-    'k_hdrs_90': 'K Hdrs/90',
-    'k_tck_90': 'K Tck/90',
-    'mins': 'Mins',
-    'np_xg_90': 'NP-xG/90',
-    'op_cr_r': 'OP-Cr %',
-    'op_crs_a_90': 'OP-Crs A/90',
-    'op_crs_c_90': 'OP-Crs C/90',
-    'op_kp_90': 'OP-KP/90',
-    'pas_r': 'Pas %',
-    'pen_s': 'Pens S',
-    'pens': 'Pens',
-    'pens_r': 'Pen/R',
-    'poss_lost_90': 'Poss Lost/90',
-    'poss_won_90': 'Poss Won/90',
-    'pr_passes_90': 'Pr passes/90',
-    'pres_a_90': 'Pres A/90',
-    'pres_c_90': 'Pres C/90',
-    'ps_a_90': 'Ps A/90',
-    'ps_c_90': 'Ps C/90',
-    'shot_r': 'Shot %',
-    'shot_90': 'Shot/90',
-    'sprints_90': 'Sprints/90',
-    'tck_a': 'Tck A',
-    'tck_r': 'Tck R',
-    'tck_w': 'Tck W',
-    'tck_90': 'Tck/90',
-    'tcon_90': 'Tcon/90',
-    'tgls_90': 'Tgls/90',
-    'weight': 'Weight',
-    'xa': 'xA',
-    'xa_90': 'xA/90',
-    'xg': 'xG',
-    'xg_90': 'xG/90',
-    'xg_op': 'xG-OP',
-}
+# numeric_cc_to_fields = {
+#     'aer_a_90': 'Aer A/90',
+#     'ast': 'Ast',
+#     'asts_90': 'Asts/90',
+#     'av_rat': 'Av Rat',
+#     'blk_90': 'Blk/90',
+#     'ch_c_90': 'Ch C/90',
+#     'clr_90': 'Clr/90',
+#     'conv_r': 'Conv %',
+#     'dist': 'Distance',
+#     'dist_90': 'Dist/90',
+#     'drb_90': 'Drb/90',
+#     'fa': 'FA',
+#     'fls': 'Fls',
+#     'gl_mst': 'Gl Mst',
+#     'gls': 'Gls',
+#     'gls_90': 'Gls/90',
+#     'hdr_r': 'Hdr %',
+#     'hdrs_l_90': 'Hdrs L/90',
+#     'hdrs_w_90': 'Hdrs W/90',
+#     'height': 'Height',
+#     'int_90': 'Int/90',
+#     'k_hdrs_90': 'K Hdrs/90',
+#     'k_tck_90': 'K Tck/90',
+#     'mins': 'Mins',
+#     'np_xg_90': 'NP-xG/90',
+#     'op_cr_r': 'OP-Cr %',
+#     'op_crs_a_90': 'OP-Crs A/90',
+#     'op_crs_c_90': 'OP-Crs C/90',
+#     'op_kp_90': 'OP-KP/90',
+#     'pas_r': 'Pas %',
+#     'pen_s': 'Pens S',
+#     'pens': 'Pens',
+#     'pens_r': 'Pen/R',
+#     'poss_lost_90': 'Poss Lost/90',
+#     'poss_won_90': 'Poss Won/90',
+#     'pr_passes_90': 'Pr passes/90',
+#     'pres_a_90': 'Pres A/90',
+#     'pres_c_90': 'Pres C/90',
+#     'ps_a_90': 'Ps A/90',
+#     'ps_c_90': 'Ps C/90',
+#     'shot_r': 'Shot %',
+#     'shot_90': 'Shot/90',
+#     'sprints_90': 'Sprints/90',
+#     'tck_a': 'Tck A',
+#     'tck_r': 'Tck R',
+#     'tck_w': 'Tck W',
+#     'tck_90': 'Tck/90',
+#     'tcon_90': 'Tcon/90',
+#     'tgls_90': 'Tgls/90',
+#     'weight': 'Weight',
+#     'xa': 'xA',
+#     'xa_90': 'xA/90',
+#     'xg': 'xG',
+#     'xg_90': 'xG/90',
+#     'xg_op': 'xG-OP',
+# }

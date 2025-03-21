@@ -8,6 +8,9 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
 
     # drop rows with no player UID
     df = df.dropna(subset=['UID'])
+    # 'Rec' and 'Info' are not useful
+    # 'Dist/90' is not exported correctly by FM24 (all zeros)
+    df = df.drop(columns=['rec', 'inf', 'dist_90'])
 
     # TODO: improve this
     # sanity check to ensure all the necessary fields are included
@@ -19,26 +22,25 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
     else:
         print("DataFrame contains all required fields.")
 
-    # renaming FM fields to camel case
-    df = df.rename(columns=nonnumeric_fields_to_cc)
-    df = df.rename(columns=numeric_fields_to_cc)
+    # # renaming FM fields to camel case
+    # df = df.rename(columns=nonnumeric_fields_to_cc)
+    # df = df.rename(columns=numeric_fields_to_cc)
 
     # use UID as index
-    df['uid'] = df['uid'].astype(str).str.replace(',', '')
-    df = df.set_index('uid')
+    df[PLAYER_UID] = df[PLAYER_UID].astype(str).str.replace(',', '')
+    df = df.set_index(PLAYER_UID)
     
-    # 'Rec' and 'Info' are not useful
-    # 'Dist/90' is not exported correctly by FM24 (all zeros)
-    df = df.drop(columns=['rec', 'inf', 'dist_90'])
-
     # TODO: improve this
     # Replace missing stats with 0s
     # Note: in Football Manager - ~ 0
     df = df.replace('-', 0)
 
+    # assert correct metric units
+    assert df[PLAYER_WEIGHT].first().split()[1] == 'kg'
+    assert df[PLAYER_HEIGHT].first().split()[1] == 'cm'
     # transform weight, height columns
-    df['weight'] = df['weight'].str.split().str[0]  # only keep numeric value, should be in cm
-    df['height'] = df['height'].str.split().str[0]  # only keep numeric value, should be in kg
+    df[PLAYER_WEIGHT] = df[PLAYER_WEIGHT].str.split().str[0]  # only keep numeric value, should be in cm
+    df[PLAYER_HEIGHT] = df[PLAYER_HEIGHT].str.split().str[0]  # only keep numeric value, should be in kg
 
     # transform salary column (expected to be in £ per week)
     df['salary'] = df['salary'].str.extract(r'£([\d,]+)\s*p/w')[0]
