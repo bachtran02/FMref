@@ -25,7 +25,7 @@ PER90_METRICS = {
     CONV_R:           {'type': 'att', 'display': 'Conversion %'},
     XG_OP_90:         {'type': 'att', 'display': 'xG\nOverperformance'},
 
-    ASTS_90:          {'type': 'att', 'display': 'Assists\n%'},
+    ASTS_90:          {'type': 'att', 'display': 'Assists'},
     XA_90:            {'type': 'att', 'display': 'Expected\nAssists'},
     PS_A_90:          {'type': 'pos', 'display': 'Passes\nAttempted'},
     PAS_R:            {'type': 'pos', 'display': 'Pass\nCompletion %'},

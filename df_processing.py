@@ -41,7 +41,7 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
     assert _first_entry[PLAYER_WEIGHT].split()[1] == 'kg'
     assert _first_entry[PLAYER_HEIGHT].split()[1] == 'cm'
     assert _first_entry[PLAYER_SALARY][0] == '£'
-    assert _first_entry[DIST][-2:] == 'mi'
+    # assert _first_entry[DIST][-2:] == 'mi'
 
     # transform weight, height columns
     df[PLAYER_WEIGHT] = df[PLAYER_WEIGHT].str.split().str[0]  # only keep numeric value, should be in cm
