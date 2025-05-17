@@ -125,20 +125,23 @@ PER90_METRICS = {
 # }
 
 def find_percentiles(df, metrics, player_name):
-
     # Get the player data
     player_stats = df[df[PLAYER_NAME] == player_name]
-    assert player_stats.empty is False
+    assert not player_stats.empty, f"No data found for player: {player_name}"
+    
     # Get the player's stats for the selected metrics
     player_stats = player_stats[metrics].iloc[0]
     
-    # Return percentiles for each stat in the metrics
-    return np.rint(np.array([
-        min(99, 100 - stats.percentileofscore(df[param], player_stats[param])) 
-        if param.startswith('Poss Lost')  # poss lost percentile is inversed (more poss lost ~ lower percentile)
-        else max(1, min(99, int(stats.percentileofscore(df[param], player_stats[param]))))
+    # Calculate percentiles, handling NaN values
+    percentiles = [
+        min(99, 100 - stats.percentileofscore(df[param].dropna(), player_stats[param]))
+        if param.startswith('Poss Lost')  # inverse for 'Poss Lost'
+        else max(1, min(99, int(np.nan_to_num(stats.percentileofscore(df[param].dropna(), player_stats[param]), nan=1))))
         for param in metrics
-    ])).astype(int)
+    ]
+    
+    # Convert to integers after ensuring no NaN values
+    return np.rint(np.array(percentiles)).astype(int)
 
 def pizza_player_statistics_page():
 
