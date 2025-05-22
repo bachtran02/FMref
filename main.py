@@ -4,7 +4,8 @@ from player_df import PlayerDF
 
 from pages.upload_players import *
 # from pages.input_poss import input_poss_page
-from pages.player_pizza import *
+from pages.player_stats import *
+from pages.test_page import *
 
 from df_processing import *
 
@@ -13,18 +14,15 @@ if __name__ == '__main__':
     # initialize player dataframe if not exists
     if 'player_df' not in st.session_state:
         st.session_state['player_df'] = PlayerDF()
-    if 'team_df' not in st.session_state:
-        st.session_state['team_df'] = PlayerDF()
+    # if 'team_df' not in st.session_state:
+    #     st.session_state['team_df'] = PlayerDF()
 
     pages = {
         '': [
             st.Page(player_dataframe_page, title='Player Dataframe'),
-            # st.Page(input_poss_page, title='Input possession'),
+            st.Page(player_statistics_page, title='Player Statistics'),
+            st.Page(test_page, title='Test Page'),
         ], 
-        'Pizza Chart Visualizations': [
-            st.Page(pizza_player_statistics_page, title='Player Statistics'),
-            # st.Page(pizza_comparison_page, title='Player Comparison')
-        ]
     }
     pg = st.navigation(pages)
     pg.run()

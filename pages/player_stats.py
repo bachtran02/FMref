@@ -17,7 +17,7 @@ DEFAULT_SELECTED_METRICS = [
 ]
 
 PER90_METRICS = {
-    GLS_90:            {'type': 'att', 'display': 'Goals'},
+    GLS_90:           {'type': 'att', 'display': 'Goals'},
     XG_90:            {'type': 'att', 'display': 'xG'},
     NP_XG_90:         {'type': 'att', 'display': 'Non-penalty\nxG'},
     SHOT_90:          {'type': 'att', 'display': 'Shots'},
@@ -62,67 +62,7 @@ PER90_METRICS = {
     SPRINTS_90:       {'type': 'def', 'display': 'High-intensity\nSprints'},
     DIST_90:          {'type': 'def', 'display': 'Distance\nCovered'},
     FLS_90:           {'type': 'def', 'display': 'Fouls Made'},
-    # 'padj_def_act_90':  {'type': 'def', 'display': 'PAdj\nDef. Actions'},
-    # 'padj_poss_won_90': {'type': 'pos', 'display': 'PAdj\nPossession Won'},
-    # 'padj_pres_a_90':   {'type': 'def', 'display': 'PAdj\nPressures\nAttempted'},
-    # 'padj_blk_90':      {'type': 'def', 'display': 'PAdj\nBlocks'},
-    # 'padj_int_90':      {'type': 'def', 'display': 'PAdj\nInterceptions'},
-    # 'padj_k_tck_90':    {'type': 'def', 'display': 'PAdj\nKey Tackles'},
-    # 'padj_tck_90':      {'type': 'def', 'display': 'PAdj\nTackles Won'}
 }
-
-# PER90_METRICS = {
-#     'gls_90:           {'type': 'att', 'display': 'Goals'},
-#     'xg_90':            {'type': 'att', 'display': 'xG'},
-#     'np_xg_90':         {'type': 'att', 'display': 'Non-penalty\nxG'},
-#     'shot_90':          {'type': 'att', 'display': 'Shots'},
-#     'shot_r':           {'type': 'att', 'display': 'Shot\nOn Target %'},
-#     'conv_r':           {'type': 'att', 'display': 'Conversion %'},
-#     'asts_90':          {'type': 'att', 'display': 'Assists\n%'},
-#     'xa_90':            {'type': 'att', 'display': 'Expected\nAssists'},
-#     'ps_a_90':          {'type': 'pos', 'display': 'Passes\nAttempted'},
-#     'pas_r':            {'type': 'pos', 'display': 'Pass\nCompletion %'},
-#     'ps_c_90':          {'type': 'pos', 'display': 'Passes\nCompleted'},
-#     'pr_passes_90':     {'type': 'pos', 'display': 'Progressive\nPasses'},
-#     'op_kp_90':         {'type': 'att', 'display': 'Open-play\nKey Passes'},
-#     'op_crs_a_90':      {'type': 'att', 'display': 'Open-play\nCrosses\nAttempted'},
-#     'op_cr_r':          {'type': 'att', 'display': 'Open-play\nCross %'},
-#     'op_crs_c':         {'type': 'att', 'display': 'Open-play\nCrosses\nCompleted'},
-#     'ch_c_90':          {'type': 'att', 'display': 'Chances\nCreated'},
-#     'drb_90':           {'type': 'pos', 'display': 'Dribbles\nCompleted'},
-#     'poss_won_90':      {'type': 'pos', 'display': 'Possession\nWon'},
-#     'poss_lost_90':     {'type': 'pos', 'display': 'Possession\nLost'},
-#     'tck_90':           {'type': 'def', 'display': 'Tackles Won'},
-#     'tck_r':            {'type': 'def', 'display': 'Tackle Won %'},
-#     'k_tck_90':         {'type': 'def', 'display': 'Key Tackles'},
-#     'blk_90':           {'type': 'def', 'display': 'Blocks'},
-#     'int_90':           {'type': 'def', 'display': 'Interceptions'},
-#     'clr_90':           {'type': 'def', 'display': 'Clearances'},
-#     'aer_a_90':         {'type': 'def', 'display': 'Aerial Duels\nAttempted'},
-#     'hdr_r':            {'type': 'def', 'display': 'Headers\nWon %'},
-#     'hdrs_w_90':        {'type': 'def', 'display': 'Headers\nWon'},
-#     'hdrs_l_90':        {'type': 'def', 'display': 'Headers\nLost'},
-#     'k_hdrs_90':        {'type': 'def', 'display': 'Key Headers'},
-#     'pres_a_90':        {'type': 'def', 'display': 'Pressures\nAttempted'},
-#     'pres_c_90':        {'type': 'def', 'display': 'Pressures\nCompleted'},
-#     'sprints_90':       {'type': 'def', 'display': 'High-intensity\nSprints'},
-#     'dist_90':          {'type': 'def', 'display': 'Distance\nCovered'},
-#     'fls_90':           {'type': 'def', 'display': 'Fouls Made'},
-#     'fa_90':            {'type': 'def', 'display': 'Fouls Against'},
-#     'tck_a_90':         {'type': 'def', 'display': 'Tackles\nAttempted'},
-#     'xg_op_90':         {'type': 'att', 'display': 'xG\nOverperformance'},
-#     'net_poss_90':      {'type': 'pos', 'display': 'Net\nPossession\nGained'},
-#     'def_act_90':       {'type': 'def', 'display': 'Defensive\nActions'},
-#     'pres_r':           {'type': 'def', 'display': 'Pressures\n Completed %'},
-#     'pr_passes_r':      {'type': 'pos', 'display': 'Progressive\nPasses %'},
-#     'padj_def_act_90':  {'type': 'def', 'display': 'PAdj\nDef. Actions'},
-#     'padj_poss_won_90': {'type': 'pos', 'display': 'PAdj\nPossession Won'},
-#     'padj_pres_a_90':   {'type': 'def', 'display': 'PAdj\nPressures\nAttempted'},
-#     'padj_blk_90':      {'type': 'def', 'display': 'PAdj\nBlocks'},
-#     'padj_int_90':      {'type': 'def', 'display': 'PAdj\nInterceptions'},
-#     'padj_k_tck_90':    {'type': 'def', 'display': 'PAdj\nKey Tackles'},
-#     'padj_tck_90':      {'type': 'def', 'display': 'PAdj\nTackles Won'}
-# }
 
 def find_percentiles(df, metrics, player_name):
     # Get the player data
@@ -143,41 +83,43 @@ def find_percentiles(df, metrics, player_name):
     # Convert to integers after ensuring no NaN values
     return np.rint(np.array(percentiles)).astype(int)
 
-def pizza_player_statistics_page():
-
+def player_statistics_page():
     assert 'player_df' in st.session_state
     player_df: PlayerDF = st.session_state['player_df']
 
-    assert 'team_df' in st.session_state
-    team_df: PlayerDF = st.session_state['team_df']
-
     st.write('## Player Statistics')
-
     if player_df.is_empty():
         st.warning('Please upload player file first.')
         return        
 
     df = player_df.get_dataframe()
 
-    if not team_df.is_empty():
-        # merge df with team_df
-        _team_df = team_df.get_dataframe()
-        _team_df = _team_df[_team_df[PLAYER_NAME] == 'Fabio Chiarodia']
-        _team_df = _team_df.reindex(columns=df.columns)
-        # Concatenate
-        df = pd.concat([df, _team_df], ignore_index=True)
-        st.write(df)
-
+    # TODO: handle duplicate player names
     player_names = df[PLAYER_NAME].sort_values()
     player_name = st.selectbox(label='Select Player', options=player_names)
 
-    selected_metrics = st.multiselect(
-        label='Select metrics to display',
-        options=PER90_METRICS.keys(),
-        default=DEFAULT_SELECTED_METRICS
-    )
-    plot_player_pizza_chart(player_name, df, selected_metrics)
+    display_player_statistics(player_name)
+    # selected_metrics = st.multiselect(
+    #     label='Select metrics to display',
+    #     options=PER90_METRICS.keys(),
+    #     default=DEFAULT_SELECTED_METRICS
+    # )
+    # plot_player_pizza_chart(player_name, df, selected_metrics)
 
+def display_player_statistics(player_name: str):
+    assert 'player_df' in st.session_state
+    player_df: PlayerDF = st.session_state['player_df']
+
+    player = player_df.get_player_by_name(player_name)
+
+    # Display basic information
+    st.write(f'#### {player_name}')
+    st.write(f'**Position:** {player[PLAYER_POSITION]} ▪  **Footed**: {player[PLAYER_PREFERRED_FOOT]}')
+    st.write(f'{player[PLAYER_HEIGHT]}cm, {player[PLAYER_WEIGHT]}kg')
+    st.write(f'**Age**: {player[PLAYER_AGE]}')
+    st.write(f'**Nationality**: {player[PLAYER_NAT]}')
+    st.write(f'**Club**: {player[PLAYER_CLUB]}')
+    st.write(f'**Wages**: £{round(player[PLAYER_SALARY]):,} Weekly')
 
 # def pizza_comparison_page():
 #     st.write('## Player Comparison')

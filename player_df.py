@@ -48,3 +48,7 @@ class PlayerDF:
 
     def get_shape(self):
         return self._df.shape
+    
+    def get_player_by_name(self, player_name: str):
+        matched_rows = self._df[self._df[PLAYER_NAME] == player_name]
+        return matched_rows.iloc[0].to_dict() if not matched_rows.empty else {}
