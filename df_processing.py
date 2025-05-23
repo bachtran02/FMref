@@ -79,36 +79,3 @@ def add_custom_metrics(df: pd.DataFrame) -> pd.DataFrame:
 
     # TODO: normalize more custom metrics if needed
     return df
-
-# def add_poss_adjusted_metrics(df: pd.DataFrame) -> pd.DataFrame:
-#     if 'team_poss' not in df.columns:
-#         # Return the original DataFrame if 'team_poss' column is missing
-#         return df
-
-#     metrics_to_adjust = [
-#         'def_act_90',
-#         'poss_won_90',
-#         'pres_a_90',
-#         'blk_90',
-#         'int_90',
-#         'k_tck_90',
-#         'tck_90',
-#     ]
-    
-#     # Filter metrics that exist in the DataFrame
-#     metrics_to_adjust = [m for m in metrics_to_adjust if m in df.columns]
-
-#     if not metrics_to_adjust:
-#         # No metrics to adjust, return the DataFrame as is
-#         return df
-
-#     # Precompute the adjustment factor to avoid recomputation
-#     team_poss = df['team_poss']
-#     adjustment_factor = 2 / (1 + np.exp(-0.1 * (team_poss * 100 - 50)))
-
-#     # Add adjusted metrics
-#     for metric in metrics_to_adjust:
-#         adj_col = f'padj_{metric}'
-#         df[adj_col] = round(df[metric] * adjustment_factor, 2)
-
-#     return df

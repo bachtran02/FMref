@@ -121,32 +121,44 @@ def display_player_statistics(player_name: str):
     st.write(f'**Club**: {player[PLAYER_CLUB]}')
     st.write(f'**Wages**: £{round(player[PLAYER_SALARY]):,} Weekly')
 
-# def pizza_comparison_page():
-#     st.write('## Player Comparison')
+    st.write('---')
+    st.write('#### Statistics')
+    # st.html(table_html)
 
-#     if 'players_df' not in st.session_state:
-#         st.warning("Please upload players file first!")
-#         return
+    # construct HTML table
+    table_stats = player_stats_to_tuple_data(player)
 
-#     players_df = st.session_state['players_df']
-    
-#     player_names = players_df['name'].sort_values()
-#     player1_name = st.selectbox(
-#         label='Select Player',
-#         key='player_1',
-#         options=player_names,
-#     )
-#     player2_name = st.selectbox(
-#         label='Select Player',
-#         key='player_2',
-#         options=player_names,
-#     )
-#     selected_metrics = st.multiselect(
-#         label='Select metrics to display',
-#         options=PER90_METRICS.keys(),
-#         default=DEFAULT_SELECTED_METRICS
-#     )
-#     plot_compare_pizza_chart(player1_name, player2_name, players_df, selected_metrics)
+    # stats = [
+    #     ("Goals", "0.45", "60"),
+    #     ("Assists", "0.30", "20"),
+    #     ("Pass Accuracy", "88%", "90"),
+    # ]
+
+    table_html = """
+    <table>
+        <thead>
+            <tr>Standard Stats</tr>
+            <tr>
+                <th>Statistic</th>
+                <th>Per 90</th>
+                <th>Percentile</th>
+            </tr>
+        </thead>
+        <tbody>
+    """
+
+    for stat, per90, perc in table_stats:
+        table_html += f"""
+        <tr>
+            <td>{stat}</td>
+            <td>{per90}</td>
+            <td>{render_perc_box(int(perc))}</td>
+        </tr>
+        """
+
+    table_html += "</tbody></table>"
+    st.html(stats_table_css)
+    st.html(table_html)
 
 def plot_player_pizza_chart(player_name, df: pd.DataFrame, selected_metrics: list[str]):
 

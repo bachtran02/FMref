@@ -12,7 +12,7 @@ REGEX_WEIGHT_LB_PATTERN = r'(\d+)\slb'
 
 def find_max_transfer_value_regex_func(value_string):
     """
-    
+    Find the maximum transfer value from transfer value string.
     """
 
     pattern = r'£(\d+\.*\d*[MK]*)'
@@ -67,3 +67,66 @@ def transform_distance(distance_str):
         return round(in_km * 0.621371, 1)
     else:
         raise ValueError(f"Invalid distance format: {distance_str}")
+    
+def player_stats_to_tuple_data(player_stats: dict):
+    """
+    Convert player stats to a tuple of tuples for FBref-like HTML table rendering.
+    """
+
+
+
+
+    return tuple(
+        (stat['stat'], stat['per90'], stat['percentile'])
+        for stat in player_stats
+    )
+    pass
+    
+def render_perc_box(perc):
+    color = (
+        "#4CAF50" if perc >= 60 else
+        "#9E9E9E" if perc >= 40 else
+        "#E57373"
+    )
+    return f'''
+        <div style="display: flex;">
+            <div align="center" style="min-width: 22px; display: inline-block;">{perc}</div>
+            <div style="width: 150px;">
+                <div style="width: {perc}%; height: 100%; background-color: {color};"></div>
+            </div>
+        </div>
+    '''
+    
+stats_table_css = """
+<style>
+    table {
+        border-collapse: collapse;
+        font-size: 14px;
+        border: 1px solid #888;
+    }
+
+    thead th {
+        font-weight: bold;
+        text-align: center;
+        vertical-align: middle;
+        background-color: #f5f5f5;
+        border: 1px solid #888;
+        padding: 6px 8px;
+    }
+
+    td {
+        padding: 6px 8px;
+        text-align: right;
+        border-bottom: 1px solid #ddd;
+        border-right: 1px solid #888;
+        vertical-align: middle;
+    }
+
+    td:last-child {
+        border-right: none;
+    }
+    tr:last-child td {
+        border-bottom: 1px solid #888;
+}
+</style>
+"""
