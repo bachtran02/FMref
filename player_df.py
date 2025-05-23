@@ -37,8 +37,8 @@ class PlayerDF:
         # preprocess dataframe
         self._df = preprocess_df(self._df)
         self._df = self._df[self._df[MINS] >= self.MIN_MINUTES]   # filter out players who play fewer than MIN_MINUTES
-        self._df = normalize_metrics(self._df)
         self._df = add_custom_metrics(self._df)
+        self._df = normalize_metrics(self._df)
 
     def add_team_poss(self, poss_df: pd.DataFrame):
         pass

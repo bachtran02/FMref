@@ -53,29 +53,45 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
     df = df.replace('-', 0)
 
     # Convert % string to float
-    df[PERCENT_FIELDS] = df[PERCENT_FIELDS].apply(
+    df[PRESET_PERCENT_FIELDS] = df[PRESET_PERCENT_FIELDS].apply(
         lambda x: (pd.to_numeric(x.str.rstrip('%'), errors='coerce') / 100)).fillna(0)
 
-    df[NUMERIC_FIELDS] = df[NUMERIC_FIELDS].apply(pd.to_numeric, errors='coerce')
+    df[PRESET_NUMERIC_FIELDS] = df[PRESET_NUMERIC_FIELDS].apply(pd.to_numeric, errors='coerce')
     return df
 
 def normalize_metrics(df: pd.DataFrame) -> pd.DataFrame:
     normalize_90_fn = lambda metric: round(df[metric] / df[MINS] * 90, 2)
     normalized_cols = {
-        FLS_90: normalize_90_fn(FLS),
+        DEF_ACT_90: normalize_90_fn(DEF_ACT),
         FA_90: normalize_90_fn(FA),
+        FLS_90: normalize_90_fn(FLS),
+        GLS_AST_90: normalize_90_fn(GLS_AST),
+        GL_MST_90: normalize_90_fn(GL_MST),
+        NP_G_90: normalize_90_fn(NP_G),
+        NP_G_XA_90: normalize_90_fn(NP_G_XA),
+        NP_XG_OP_90: normalize_90_fn(NP_XG_OP),
+        OFF_90: normalize_90_fn(OFF),
+        RED_90: normalize_90_fn(RED),
         TCK_A_90: normalize_90_fn(TCK_A),
         XG_OP_90: normalize_90_fn(XG_OP),
-        GL_MST_90: normalize_90_fn(GL_MST),
+        YEL_90: normalize_90_fn(YEL),
     }
     return df.assign(**normalized_cols)
 
 def add_custom_metrics(df: pd.DataFrame) -> pd.DataFrame:
 
-    df[POSS_NET_90] = df[POSS_WON_90] - df[POSS_LOST_90]
-    df[DEF_ACT_90] = df[TCK_A_90] + df[INT_90] + df[FLS_90]
-    df[PRES_R] = round(df[PRES_C_90] / df[PRES_A_90], 2)
-    df[PR_PASSES_R] = round(df[PR_PASSES_90] / df[PS_C_90] * 100, 2)
+    custom_metrics = {
+        # FBref metrics
+        GLS_AST: df[GLS] + df[AST],
+        NP_G: df[GLS] - df[PEN_S],
+        NP_G_XA: (df[GLS] - df[PEN_S]) + df[XA],
+        CONV_OT_R: round(df[GLS_90] / df[SHT_90], 2),
+        NP_XG_OP: (df[GLS] - df[PEN_S]) - df[NP_XG],
+        NP_XG_SHOT: round(df[NP_XG_90] / df[SHOT_90], 2),
 
-    # TODO: normalize more custom metrics if needed
-    return df
+        POSS_NET_90: df[POSS_WON_90] - df[POSS_LOST_90],
+        DEF_ACT: df[TCK_A] + df[INT] + df[FLS],
+        PRES_R: round(df[PRES_C_90] / df[PRES_A_90], 2),
+        PR_PASSES_R: round(df[PR_PASSES_90] / df[PS_C_90], 2),
+    }
+    return df.assign(**custom_metrics)

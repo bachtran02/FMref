@@ -22,7 +22,9 @@ BLK_90                      = 'Blk/90'
 # CCC_90                      = 'CC Chance/90'
 CH_C_90                     = 'Ch C/90'
 CLR_90                      = 'Clr/90'
-CONV_R                      = 'Conv %'
+CONV_R                      = 'Conv %'                          # goals per shot
+CONV_OT_R                   = 'Conv oT %'                       # goals per shot on target
+DEF_ACT                     = 'Def Act'                          # defensive actions
 DEF_ACT_90                  = 'Def Act/90'                      # defensive actions per 90
 DIST                        = 'Distance'
 DIST_90                     = 'Dist/90'
@@ -35,14 +37,27 @@ GL_MST                      = 'Gl Mst'
 GL_MST_90                   = 'Gl Mst/90'
 GLS                         = 'Gls'
 GLS_90                      = 'Gls/90'
+GLS_AST                     = 'Gls + Ast'
+GLS_AST_90                  = 'Gls + Ast/90'
 HDR_R                       = 'Hdr %'
 HDRS_L_90                   = 'Hdrs L/90'
 HDRS_W_90                   = 'Hdrs W/90'
+INT                         = 'Itc'
 INT_90                      = 'Int/90'
 K_HDRS_90                   = 'K Hdrs/90'
 K_TCK_90                    = 'K Tck/90'
 MINS                        = 'Mins'
+NP_G                        = 'NP-G'                           # non-penalty goals
+NP_G_90                     = 'NP-G/90'
+NP_G_XA                     = 'npxG + xAG'
+NP_G_XA_90                  = 'npxG + xAG/90'
+NP_XG                       = 'NP-xG'
 NP_XG_90                    = 'NP-xG/90'
+NP_XG_OP                    = 'npxG-OP'
+NP_XG_OP_90                 = 'npxG-OP/90'
+NP_XG_SHOT                  = 'npxG/Shot'
+OFF                         = 'Off'
+OFF_90                      = 'Off/90'
 OP_CR_R                     = 'OP-Cr %'
 OP_CRS_A_90                 = 'OP-Crs A/90'
 OP_CRS_C_90                 = 'OP-Crs C/90'
@@ -61,8 +76,11 @@ PRES_C_90                   = 'Pres C/90'
 PRES_R                      = 'Pres R'                          # pressure success rate
 PS_A_90                     = 'Ps A/90'
 PS_C_90                     = 'Ps C/90'
+RED                         = 'Red'
+RED_90                      = 'Red/90'
 SHOT_R                      = 'Shot %'
 SHOT_90                     = 'Shot/90'
+SHT_90                      = 'ShT/90'                          # shots on target per 90
 SPRINTS_90                  = 'Sprints/90'
 TCK_A                       = 'Tck A'
 TCK_A_90                    = 'Tck A/90'
@@ -77,6 +95,8 @@ XG                          = 'xG'
 XG_90                       = 'xG/90'
 XG_OP                       = 'xG-OP'
 XG_OP_90                    = 'xG-OP/90'
+YEL                         = 'Yel'
+YEL_90                      = 'Yel/90'
 
 
 PLAYER_BASE_INFO = (
@@ -93,8 +113,8 @@ PLAYER_BASE_INFO = (
     PLAYER_UID
 )
 
-PERCENT_FIELDS = [SHOT_R, CONV_R, PAS_R, OP_CR_R, TCK_R, HDR_R]
-NUMERIC_FIELDS = [
+PRESET_PERCENT_FIELDS = [SHOT_R, CONV_R, PAS_R, OP_CR_R, TCK_R, HDR_R]
+PRESET_NUMERIC_FIELDS = [
     AER_A_90,
     AST,
     ASTS_90,
@@ -115,18 +135,21 @@ NUMERIC_FIELDS = [
     HDRS_L_90,
     HDRS_W_90,
     PLAYER_HEIGHT,
+    INT,
     INT_90,
     K_HDRS_90,
     K_TCK_90,
     MINS,
+    NP_XG,
     NP_XG_90,
+    OFF,
     OP_CR_R,
     OP_CRS_A_90,
     OP_CRS_C_90,
     OP_KP_90,
     PAS_R,
     PEN_S,
-    # PENS,
+    PENS,
     PENS_R,
     POSS_LOST_90,
     POSS_WON_90,
@@ -135,8 +158,10 @@ NUMERIC_FIELDS = [
     PRES_C_90,
     PS_A_90,
     PS_C_90,
+    RED,
     SHOT_R,
     SHOT_90,
+    SHT_90,
     SPRINTS_90,
     TCK_A,
     TCK_R,
@@ -150,6 +175,7 @@ NUMERIC_FIELDS = [
     XG,
     XG_90,
     XG_OP,
+    YEL,
 ]
 
 # player_base_info_fields = {

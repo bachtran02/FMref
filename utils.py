@@ -73,13 +73,11 @@ def player_stats_to_tuple_data(player_stats: dict):
     Convert player stats to a tuple of tuples for FBref-like HTML table rendering.
     """
 
-
-
-
-    return tuple(
-        (stat['stat'], stat['per90'], stat['percentile'])
-        for stat in player_stats
-    )
+    return [
+        ['a', 1.2, 70],
+        ['b', 2.3, 80],
+        ['c', 3.4, 90],
+    ]
     pass
     
 def render_perc_box(perc):
