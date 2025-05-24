@@ -1,5 +1,6 @@
 import re
 import numpy as np
+import pandas as pd
 from scipy import stats
 
 from fm_mapping import *
@@ -103,37 +104,49 @@ def parse_position(position_str) -> tuple:
             positions[5] = 1
     return tuple(positions)
     
-def player_stats_to_tuple_data(player_stats: dict, df):
+def player_stats_to_tuple_data(player_stats: dict, stats_to_include: dict, df):
     """
     Convert player stats to a tuple of tuples for FBref-like HTML table rendering.
     """
 
     res = []
-    fields = PRESET_PERCENT_FIELDS + PRESET_NUMERIC_FIELDS + CUSTOM_FIELDS
-    for field in fields:
-        if field in player_stats:
-            percentile = 0
-            stat = player_stats[field]
-            if stat is not None and not np.isnan(stat):
-                # get percentile
-                percentile = stats.percentileofscore(df[field], stat, kind='rank')
-                if np.isnan(percentile):
-                    percentile = 0
-                percentile = max(1, min(99, round(percentile)))
-            field_tuple = (field, round(stat, 2), percentile)
-            res.append(field_tuple)
+    # fields = PRESET_PERCENT_FIELDS + PRESET_NUMERIC_FIELDS + CUSTOM_FIELDS
+    for key in stats_to_include:
+        percentile = 0
+        stat = player_stats[key]
+        if stat is not None and not np.isnan(stat):
+            # get percentile
+            percentile = stats.percentileofscore(df[key], stat, kind='rank')
+            if np.isnan(percentile):
+                percentile = 0
+            percentile = max(1, min(99, round(percentile)))
+        field_tuple = (stats_to_include[key], round(stat, 2), percentile)
+        res.append(field_tuple)
     return res
     
-def render_perc_box(perc):
+def series_ratio_with_fallback(num: pd.Series, denom: pd.Series, fallback=0):
+    """
+    Calculate series ratio with a fallback value if denominator is zero or NaN.
+    """
+    return np.where(denom != 0, num / denom, fallback)
+
+def render_percentile_box(perc):
     color = (
-        "#4CAF50" if perc >= 60 else
-        "#9E9E9E" if perc >= 40 else
-        "#E57373"
+        "#3aaf3a" if perc >= 90 else
+        "#5caf5c" if perc >= 80 else
+        "#66af66" if perc >= 70 else
+        "#82af82" if perc >= 60 else
+        "#9baf9b" if perc >= 50 else
+        "#afafaf" if perc >= 40 else
+        "#af9191" if perc >= 30 else
+        "#af6c6c" if perc >= 20 else
+        "#af5f5f" if perc >= 10 else
+        "#af3c3c"
     )
     return f'''
         <div style="display: flex;">
             <div align="center" style="min-width: 22px; display: inline-block;">{perc}</div>
-            <div style="width: 150px;">
+            <div style="width: 200px;">
                 <div style="width: {perc}%; height: 100%; background-color: {color};"></div>
             </div>
         </div>
@@ -153,11 +166,11 @@ stats_table_css = """
         vertical-align: middle;
         background-color: #f5f5f5;
         border: 1px solid #888;
-        padding: 6px 8px;
+        padding: 3px 4px;
     }
 
     td {
-        padding: 6px 8px;
+        padding: 3px 4px;
         text-align: right;
         border-bottom: 1px solid #ddd;
         border-right: 1px solid #888;

@@ -49,15 +49,16 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
     df[DIST] = df[DIST].apply(transform_distance).astype(float)
     df[DIST_90] = round(df[DIST] / df[MINS].astype(int) * 90, 2)
 
-    # Replace missing stats with 0s
-    # Note: in Football Manager - ~ 0
-    df = df.replace('-', 0)
+    preset_percent_fields  = list(PRESET_PERCENT_FIELDS)
+    preset_numeric_fields = list(PRESET_NUMERIC_FIELDS)
 
+    # Replace missing stats with 0s (Note: in Football Manager - ~ 0)
+    df[preset_numeric_fields] = df[preset_numeric_fields].replace('-', 0).fillna(0)
     # Convert % string to float
-    df[list(PRESET_PERCENT_FIELDS)] = df[list(PRESET_PERCENT_FIELDS)].apply(
+    df[preset_percent_fields] = df[preset_percent_fields].apply(
         lambda x: (pd.to_numeric(x.str.rstrip('%'), errors='coerce') / 100)).fillna(0)
-
-    df[list(PRESET_NUMERIC_FIELDS)] = df[list(PRESET_NUMERIC_FIELDS)].apply(pd.to_numeric, errors='coerce')
+    
+    df[preset_numeric_fields] = df[preset_numeric_fields].apply(pd.to_numeric, errors='coerce')
     return df
 
 def parse_player_position(df: pd.DataFrame) -> pd.DataFrame:
@@ -67,7 +68,7 @@ def parse_player_position(df: pd.DataFrame) -> pd.DataFrame:
     return df.join(pos_df)
 
 def normalize_metrics(df: pd.DataFrame) -> pd.DataFrame:
-    normalize_90_fn = lambda metric: round(df[metric] / df[MINS] * 90, 2)
+    normalize_90_fn = lambda metric: np.round(series_ratio_with_fallback(df[metric] * 90, df[MINS]), 2)
     normalized_cols = {
         CCC_90: normalize_90_fn(CCC),
         DEF_ACT_90: normalize_90_fn(DEF_ACT),
@@ -79,6 +80,8 @@ def normalize_metrics(df: pd.DataFrame) -> pd.DataFrame:
         NP_G_XA_90: normalize_90_fn(NP_G_XA),
         NP_XG_OP_90: normalize_90_fn(NP_XG_OP),
         OFF_90: normalize_90_fn(OFF),
+        PEN_S_90: normalize_90_fn(PEN_S),
+        PENS_90: normalize_90_fn(PENS),
         RED_90: normalize_90_fn(RED),
         TCK_A_90: normalize_90_fn(TCK_A),
         XG_OP_90: normalize_90_fn(XG_OP),
@@ -93,13 +96,13 @@ def add_custom_metrics(df: pd.DataFrame) -> pd.DataFrame:
         GLS_AST: df[GLS] + df[AST],
         NP_G: df[GLS] - df[PEN_S],
         NP_G_XA: (df[GLS] - df[PEN_S]) + df[XA],
-        CONV_OT_R: round(df[GLS_90] / df[SHT_90], 2),
-        NP_XG_OP: round((df[GLS] - df[PEN_S]) - df[NP_XG]),
-        NP_XG_SHOT: round(df[NP_XG_90] / df[SHOT_90], 2),
+        CONV_OT_R: np.round(series_ratio_with_fallback(df[GLS_90], df[SHT_90]), 2), 
+        NP_XG_OP: np.round((df[GLS] - df[PEN_S]) - df[NP_XG]),
+        NP_XG_SHOT: np.round(series_ratio_with_fallback(df[NP_XG_90], df[SHOT_90]), 2),
 
         DEF_ACT: df[TCK_A] + df[INT] + df[FLS],
-        POSS_NET_90: round(df[POSS_WON_90] - df[POSS_LOST_90], 2),
-        PRES_R: round(df[PRES_C_90] / df[PRES_A_90], 2),
-        PR_PASSES_R: round(df[PR_PASSES_90] / df[PS_C_90], 2),
+        POSS_NET_90: np.round(df[POSS_WON_90] - df[POSS_LOST_90], 2),
+        PRES_R: np.round(series_ratio_with_fallback(df[PRES_C_90], df[PRES_A_90]), 2),
+        PR_PASSES_R: np.round(series_ratio_with_fallback(df[PR_PASSES_90], df[PS_C_90]), 2),
     }
     return df.assign(**custom_metrics)

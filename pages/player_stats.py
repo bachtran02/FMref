@@ -7,6 +7,7 @@ from highlight_text import fig_text
 
 from df_processing import *
 from player_df import PlayerDF
+from player_stats_page.stats_components import *
 from utils import FONT_NORMAL_FILE, FONT_ITALIC_FILE, FONT_BOLD_FILE
 
 DEFAULT_SELECTED_METRICS = [
@@ -110,55 +111,11 @@ def display_player_statistics(player_name: str):
     assert 'player_df' in st.session_state
     player_df: PlayerDF = st.session_state['player_df']
 
-    player = player_df.get_player_by_name(player_name)
-
-    # Display basic information
-    st.write(f'#### {player_name}')
-    st.write(f'**Position:** {player[PLAYER_POSITION]} ▪  **Footed**: {player[PLAYER_PREFERRED_FOOT]}')
-    st.write(f'{player[PLAYER_HEIGHT]}cm, {player[PLAYER_WEIGHT]}kg')
-    st.write(f'**Age**: {player[PLAYER_AGE]}')
-    st.write(f'**Nationality**: {player[PLAYER_NAT]}')
-    st.write(f'**Club**: {player[PLAYER_CLUB]}')
-    st.write(f'**Wages**: £{round(player[PLAYER_SALARY]):,} Weekly')
-
-    st.write('---')
-    st.write('#### Statistics')
-    # st.html(table_html)
-
-    # construct HTML table
     player_stats = player_df.get_player_by_name(player_name)
-    table_stats = player_stats_to_tuple_data(player_stats, player_df.get_dataframe())
 
-    # stats = [
-    #     ("Goals", "0.45", "60"),
-    #     ("Assists", "0.30", "20"),
-    #     ("Pass Accuracy", "88%", "90"),
-    # ]
-
-    table_html = """
-    <table>
-        <thead>
-            <tr>
-                <th>Statistic</th>
-                <th>Per 90</th>
-                <th>Percentile</th>
-            </tr>
-        </thead>
-        <tbody>
-    """
-
-    for stat, per90, perc in table_stats:
-        table_html += f"""
-        <tr>
-            <td>{stat}</td>
-            <td>{per90}</td>
-            <td>{render_perc_box(int(perc))}</td>
-        </tr>
-        """
-
-    table_html += "</tbody></table>"
-    st.html(stats_table_css)
-    st.html(table_html)
+    print_player_basic_info(player_name, player_stats)
+    print_player_summary(player_stats)
+    print_percentile_table(player_stats, player_df.get_dataframe())
 
 def plot_player_pizza_chart(player_name, df: pd.DataFrame, selected_metrics: list[str]):
 

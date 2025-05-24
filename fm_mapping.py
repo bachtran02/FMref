@@ -64,7 +64,9 @@ OP_CRS_C_90                 = 'OP-Crs C/90'
 OP_KP_90                    = 'OP-KP/90'
 PAS_R                       = 'Pas %'
 PEN_S                       = 'Pens S'
+PEN_S_90                    = 'Pens S/90'                       # penalty kicks scored per 90
 PENS                        = 'Pens'
+PENS_90                     = 'Pens/90'                         # penalty kicks attempted per 90
 PENS_R                      = 'Pen/R'
 POSS_LOST_90                = 'Poss Lost/90'
 POSS_NET_90                 = 'Poss Net/90'
@@ -113,7 +115,7 @@ PLAYER_BASE_INFO = (
     PLAYER_UID
 )
 
-PRESET_PERCENT_FIELDS = (SHOT_R, CONV_R, PAS_R, OP_CR_R, TCK_R, HDR_R)
+PRESET_PERCENT_FIELDS = (SHOT_R, CONV_R, PAS_R, OP_CR_R, TCK_R, HDR_R, PENS_R)
 PRESET_NUMERIC_FIELDS = (
     AER_A_90,
     AST,
@@ -203,3 +205,40 @@ CUSTOM_FIELDS = (
     XG_OP_90,
     YEL_90,
 )
+
+PER90_PERCENTILE_STANDARD_STATS = {
+    GLS_90: 'Goals',
+    ASTS_90: 'Assists',
+    GLS_AST_90: 'Goals + Assists',
+    NP_G_90: 'Non-Penalty Goals',
+    PEN_S_90: 'Penalty Kicks Made',
+    PENS_90: 'Penalty Kicks Attempted',
+    YEL_90: 'Yellow Cards',
+    RED_90: 'Red Cards',
+    XG_90: 'xG: Expected Goals',
+    NP_XG_90: 'npxG: Non-Penalty XG',
+    XA_90: 'xA: Expected Assists',
+    NP_G_XA_90: 'npxG + xA',
+    PR_PASSES_90: 'Progressive Passes',
+}
+
+PER90_PERCENTILE_SHOOTING_STATS = {
+    GLS_90: 'Goals',
+    SHOT_90: 'Shots',
+    SHT_90: 'Shots on Target',
+    SHOT_R: 'Shots On Target %',
+    CONV_R: 'Goals/Shot',
+    CONV_OT_R: 'Goals/Shot on Target',
+    PEN_S_90: 'Penalty Kicks Made',
+    PENS_90: 'Penalty Kicks Attempted',
+    PENS_R: 'Penalty Kicks %',
+    XG_90: 'xG: Expected Goals',
+    NP_XG_90: 'npxG: Non-Penalty XG',
+    NP_XG_SHOT: 'npxG/Shot',
+    XG_OP_90: 'Goals - xG',
+    NP_XG_OP_90: 'Non-Penalty Goals - npxG',
+}
+
+PER90_PERCENTILE_PASSING_STATS = {
+        
+}
