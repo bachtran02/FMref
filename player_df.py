@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 from fm_mapping import *
 
-from df_processing import preprocess_df, normalize_metrics, add_custom_metrics
+from df_processing import *
 
 class PlayerDF:
 
@@ -37,6 +37,7 @@ class PlayerDF:
         # preprocess dataframe
         self._df = preprocess_df(self._df)
         self._df = self._df[self._df[MINS] >= self.MIN_MINUTES]   # filter out players who play fewer than MIN_MINUTES
+        self._df = parse_player_position(self._df)
         self._df = add_custom_metrics(self._df)
         self._df = normalize_metrics(self._df)
 
@@ -52,3 +53,15 @@ class PlayerDF:
     def get_player_by_name(self, player_name: str):
         matched_rows = self._df[self._df[PLAYER_NAME] == player_name]
         return matched_rows.iloc[0].to_dict() if not matched_rows.empty else {}
+    
+    def get_player_percentiles_by_name(self, player_name: str):
+        player = self.get_player_by_name(player_name)
+        if not player:
+            return {}
+        
+        percentiles = {}
+        for col in self._df.columns:
+            if col in PRESET_PERCENT_FIELDS:
+                percentiles[col] = self._df[col].rank(pct=True).loc[player[PLAYER_UID]]
+        
+        return percentiles

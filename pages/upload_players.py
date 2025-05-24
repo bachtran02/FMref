@@ -24,7 +24,7 @@ def player_dataframe_page():
     _player_file = _player_file or st.session_state['player_file']
     st.session_state['player_file'] = _player_file
 
-    player_df.init_df(_player_file)        
+    player_df.init_df(_player_file)
     df_shape = player_df.get_shape()
     
     st.write("#### Player Dataframe")

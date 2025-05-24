@@ -1,5 +1,8 @@
 import re
 import numpy as np
+from scipy import stats
+
+from fm_mapping import *
 
 FONT_NORMAL_FILE = 'https://raw.githubusercontent.com/googlefonts/roboto/main/src/hinted/Roboto-Regular.ttf'
 FONT_ITALIC_FILE = 'https://raw.githubusercontent.com/googlefonts/roboto/main/src/hinted/Roboto-Italic.ttf'
@@ -23,7 +26,7 @@ def find_max_transfer_value_regex_func(value_string):
             return 0
         val, unit = float(s[:-1]), s[-1] 
         if unit == 'M':
-            val *= 1_000_000_000
+            val *= 1_000_000
         elif unit == 'K':
             val *= 1000
         return val
@@ -68,17 +71,58 @@ def transform_distance(distance_str):
     else:
         raise ValueError(f"Invalid distance format: {distance_str}")
     
-def player_stats_to_tuple_data(player_stats: dict):
+def parse_position(position_str) -> tuple:
+    """
+    """
+    positions = [0, 0, 0, 0, 0, 0]
+    pos_groups = position_str.split(',')
+    for group in pos_groups:
+        p = group.split()
+
+        # edge case
+        if p[0] == 'GK':
+            positions[0] = 1
+            continue
+        if p[0] == 'DM':
+            positions[3] = 1
+            continue
+
+        pos = p[0].split('/')   # D WB M AM ST
+        side = p[1].strip('()')  # R L C
+
+        if 'D' in pos and 'C' in side:
+            positions[1] = 1
+        if any(x in pos for x in ['D', 'WB']) and any(x in side for x in ['R', 'L']):
+            positions[2] = 1
+        if any(x in pos for x in ['DM', 'M']) and 'C' in side:
+            positions[3] = 1
+        if any(x in pos for x in ['M', 'AM']) and any(x in side for x in ['R', 'L']) or \
+            ('AM' in pos and 'C' in side):
+            positions[4] = 1
+        if 'ST' in pos:
+            positions[5] = 1
+    return tuple(positions)
+    
+def player_stats_to_tuple_data(player_stats: dict, df):
     """
     Convert player stats to a tuple of tuples for FBref-like HTML table rendering.
     """
 
-    return [
-        ['a', 1.2, 70],
-        ['b', 2.3, 80],
-        ['c', 3.4, 90],
-    ]
-    pass
+    res = []
+    fields = PRESET_PERCENT_FIELDS + PRESET_NUMERIC_FIELDS + CUSTOM_FIELDS
+    for field in fields:
+        if field in player_stats:
+            percentile = 0
+            stat = player_stats[field]
+            if stat is not None and not np.isnan(stat):
+                # get percentile
+                percentile = stats.percentileofscore(df[field], stat, kind='rank')
+                if np.isnan(percentile):
+                    percentile = 0
+                percentile = max(1, min(99, round(percentile)))
+            field_tuple = (field, round(stat, 2), percentile)
+            res.append(field_tuple)
+    return res
     
 def render_perc_box(perc):
     color = (

@@ -126,7 +126,8 @@ def display_player_statistics(player_name: str):
     # st.html(table_html)
 
     # construct HTML table
-    table_stats = player_stats_to_tuple_data(player_name, )
+    player_stats = player_df.get_player_by_name(player_name)
+    table_stats = player_stats_to_tuple_data(player_stats, player_df.get_dataframe())
 
     # stats = [
     #     ("Goals", "0.45", "60"),

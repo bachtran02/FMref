@@ -26,6 +26,7 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
     # use UID as index
     df[PLAYER_UID] = df[PLAYER_UID].astype(str).str.replace(',', '')
     df = df.set_index(PLAYER_UID)
+    df = df.sort_index()                                            # sort by player UID
     
     # transform weight columns
     df[PLAYER_HEIGHT] = df[PLAYER_HEIGHT].apply(transform_height).astype(int)
@@ -53,15 +54,22 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
     df = df.replace('-', 0)
 
     # Convert % string to float
-    df[PRESET_PERCENT_FIELDS] = df[PRESET_PERCENT_FIELDS].apply(
+    df[list(PRESET_PERCENT_FIELDS)] = df[list(PRESET_PERCENT_FIELDS)].apply(
         lambda x: (pd.to_numeric(x.str.rstrip('%'), errors='coerce') / 100)).fillna(0)
 
-    df[PRESET_NUMERIC_FIELDS] = df[PRESET_NUMERIC_FIELDS].apply(pd.to_numeric, errors='coerce')
+    df[list(PRESET_NUMERIC_FIELDS)] = df[list(PRESET_NUMERIC_FIELDS)].apply(pd.to_numeric, errors='coerce')
     return df
+
+def parse_player_position(df: pd.DataFrame) -> pd.DataFrame:
+    pos_array = df[PLAYER_POSITION].apply(parse_position)
+    pos_df = pd.DataFrame(pos_array.tolist(), index=df.index)
+    pos_df.columns = ['Goalkeeper', 'Centerback', 'Fullback', 'Midfielder', 'Att-Mid/Winger', 'Forward']
+    return df.join(pos_df)
 
 def normalize_metrics(df: pd.DataFrame) -> pd.DataFrame:
     normalize_90_fn = lambda metric: round(df[metric] / df[MINS] * 90, 2)
     normalized_cols = {
+        CCC_90: normalize_90_fn(CCC),
         DEF_ACT_90: normalize_90_fn(DEF_ACT),
         FA_90: normalize_90_fn(FA),
         FLS_90: normalize_90_fn(FLS),
@@ -86,11 +94,11 @@ def add_custom_metrics(df: pd.DataFrame) -> pd.DataFrame:
         NP_G: df[GLS] - df[PEN_S],
         NP_G_XA: (df[GLS] - df[PEN_S]) + df[XA],
         CONV_OT_R: round(df[GLS_90] / df[SHT_90], 2),
-        NP_XG_OP: (df[GLS] - df[PEN_S]) - df[NP_XG],
+        NP_XG_OP: round((df[GLS] - df[PEN_S]) - df[NP_XG]),
         NP_XG_SHOT: round(df[NP_XG_90] / df[SHOT_90], 2),
 
-        POSS_NET_90: df[POSS_WON_90] - df[POSS_LOST_90],
         DEF_ACT: df[TCK_A] + df[INT] + df[FLS],
+        POSS_NET_90: round(df[POSS_WON_90] - df[POSS_LOST_90], 2),
         PRES_R: round(df[PRES_C_90] / df[PRES_A_90], 2),
         PR_PASSES_R: round(df[PR_PASSES_90] / df[PS_C_90], 2),
     }
