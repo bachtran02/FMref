@@ -84,6 +84,7 @@ def normalize_metrics(df: pd.DataFrame) -> pd.DataFrame:
         PENS_90: normalize_90_fn(PENS),
         RED_90: normalize_90_fn(RED),
         TCK_A_90: normalize_90_fn(TCK_A),
+        TCK_INT_90: normalize_90_fn(TCK_INT),
         XG_OP_90: normalize_90_fn(XG_OP),
         YEL_90: normalize_90_fn(YEL),
     }
@@ -93,12 +94,14 @@ def add_custom_metrics(df: pd.DataFrame) -> pd.DataFrame:
 
     custom_metrics = {
         # FBref metrics
+        BLK_PAS_90: df[BLK_90] - df[BLK_SHT_90],
         GLS_AST: df[GLS] + df[AST],
         NP_G: df[GLS] - df[PEN_S],
         NP_G_XA: (df[GLS] - df[PEN_S]) + df[XA],
         CONV_OT_R: np.round(series_ratio_with_fallback(df[GLS_90], df[SHT_90]), 2), 
         NP_XG_OP: np.round((df[GLS] - df[PEN_S]) - df[NP_XG]),
         NP_XG_SHOT: np.round(series_ratio_with_fallback(df[NP_XG_90], df[SHOT_90]), 2),
+        TCK_INT : df[TCK_W] + df[INT],
 
         DEF_ACT: df[TCK_A] + df[INT] + df[FLS],
         POSS_NET_90: np.round(df[POSS_WON_90] - df[POSS_LOST_90], 2),

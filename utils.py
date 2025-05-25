@@ -110,16 +110,21 @@ def player_stats_to_tuple_data(player_stats: dict, stats_to_include: dict, df):
     """
 
     res = []
-    # fields = PRESET_PERCENT_FIELDS + PRESET_NUMERIC_FIELDS + CUSTOM_FIELDS
     for key in stats_to_include:
         percentile = 0
-        stat = player_stats[key]
+        stat = player_stats.get(key, 0)
         if stat is not None and not np.isnan(stat):
-            # get percentile
             percentile = stats.percentileofscore(df[key], stat, kind='rank')
             if np.isnan(percentile):
                 percentile = 0
-            percentile = max(1, min(99, round(percentile)))
+            percentile = round(percentile)
+
+            # Invert percentile for certain fields
+            if key in INVERTED_PERCENTILE_FIELDS:
+                percentile = 100 - percentile
+
+            percentile = max(1, min(99, percentile))
+
         field_tuple = (stats_to_include[key], round(stat, 2), percentile)
         res.append(field_tuple)
     return res

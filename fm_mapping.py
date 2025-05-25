@@ -18,6 +18,8 @@ AST                         = 'Ast'
 ASTS_90                     = 'Asts/90'
 AV_RAT                      = 'Av Rat'
 BLK_90                      = 'Blk/90'
+BLK_PAS_90                  = 'Pass Blckd/90'                      # blocked passes per 90
+BLK_SHT_90                  = 'Shts Blckd/90'
 CCC                         = 'CCC'
 CCC_90                      = 'CC Chance/90'
 CH_C_90                     = 'Ch C/90'
@@ -89,6 +91,8 @@ TCK_A_90                    = 'Tck A/90'
 TCK_W                       = 'Tck W'
 TCK_R                       = 'Tck R'
 TCK_90                      = 'Tck/90'
+TCK_INT                     = 'Tck + Int'                       # tackles won + interceptions
+TCK_INT_90                  = 'Tck + Int/90'                    # tackles won + interceptions per 90
 TCON_90                     = 'Tcon/90'
 TGLS_90                     = 'Tgls/90'
 XA                          = 'xA'
@@ -122,6 +126,7 @@ PRESET_NUMERIC_FIELDS = (
     ASTS_90,
     AV_RAT,
     BLK_90,
+    BLK_SHT_90,
     CCC,
     CH_C_90,
     CLR_90,
@@ -240,5 +245,58 @@ PER90_PERCENTILE_SHOOTING_STATS = {
 }
 
 PER90_PERCENTILE_PASSING_STATS = {
-        
+    PS_C_90: 'Passes Completed',
+    PS_A_90: 'Passes Attempted',
+    PAS_R: 'Pass Completion %',
+    ASTS_90: 'Assists',
+    XA_90: 'xA: Expected Assists',
+    OP_KP_90: 'Open-play Key Passes',
+    CH_C_90: 'Chances Created',
+    OP_CRS_C_90: 'Open-play Crosses Completed',
+    OP_CRS_A_90: 'Open-play Crosses Attempted',
+    OP_CR_R: 'Open-play Crosses %',
+    PR_PASSES_90: 'Progressive Passes',
 }
+
+PER90_PERCENTILE_DEFENDING_STATS = {
+    TCK_A_90: 'Tackles',
+    TCK_90: 'Tackles Won',
+    TCK_R: 'Tackle Success %',
+    K_TCK_90: 'Key Tackles',
+    BLK_90: 'Blocks',
+    BLK_SHT_90: 'Shots Blocked',
+    BLK_PAS_90: 'Passes Blocked',
+
+    INT_90: 'Interceptions',
+    TCK_INT_90: 'Tkl + Int',
+    CLR_90: 'Clearances',
+    PRES_A_90: 'Pressures Applied',
+    PRES_C_90: 'Pressures Completed',
+    PRES_R: 'Pressure Success %',
+}
+
+PER90_PERCENTILE_POSSESSION_STATS = {
+    DRB_90: 'Dribbles',
+    POSS_WON_90: 'Possession Won',
+    POSS_LOST_90: 'Possession Lost',
+    POSS_NET_90: 'Net Possession Gain',
+}
+
+PER90_PERCENTILE_MISC_STATS = {
+    YEL_90: 'Yellow Cards',
+    RED_90: 'Red Cards',
+    FLS_90: 'Fouls Committed',
+    FA_90: 'Fouls Drawn',
+    OFF_90: 'Offsides',
+    DIST_90: 'Distance Covered',
+    SPRINTS_90: 'Sprints',
+    AER_A_90: 'Aerials Attempted',
+    HDRS_W_90: 'Aerials Won',
+    HDRS_L_90: 'Aerials Lost',
+    HDR_R: '% Aerials Won',
+    K_HDRS_90: 'Key Headers',
+}
+
+INVERTED_PERCENTILE_FIELDS = (
+    YEL_90, RED_90, POSS_LOST_90, FLS_90, OFF_90, HDRS_L_90,
+)

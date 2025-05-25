@@ -49,22 +49,54 @@ def print_percentile_table(player_stats, df):
 
     standard_stats_tuple = player_stats_to_tuple_data(player_stats, PER90_PERCENTILE_STANDARD_STATS, df)
     shooting_stats_tuple = player_stats_to_tuple_data(player_stats, PER90_PERCENTILE_SHOOTING_STATS, df)
+    passing_stats_tuple = player_stats_to_tuple_data(player_stats, PER90_PERCENTILE_PASSING_STATS, df)
+    defending_stats_tuple = player_stats_to_tuple_data(player_stats, PER90_PERCENTILE_DEFENDING_STATS, df)
+    possession_stats_tuple = player_stats_to_tuple_data(player_stats, PER90_PERCENTILE_POSSESSION_STATS, df)
+    misc_stats_tuple = player_stats_to_tuple_data(player_stats, PER90_PERCENTILE_MISC_STATS, df)
 
     table = ''
     table += '<table>'
     table += PERCENTILE_TABLE_THEAD.format(category_name='Standard Stats')
     table += '<tbody>'
     for stat, per90, perc in standard_stats_tuple:
-        table += '<tr><td>{}</td><td>{}</td><td>{}</td></tr>'.format(
+        table += '<tr><td>{}</td><td>{:.2f}</td><td>{}</td></tr>'.format(
             stat, per90, render_percentile_box(int(perc))
         )
     table += '</tbody>'
     table += PERCENTILE_TABLE_THEAD.format(category_name='Shooting Stats')
     table += '<tbody>'
     for stat, per90, perc in shooting_stats_tuple:
-        table += '<tr><td>{}</td><td>{}</td><td>{}</td></tr>'.format(
+        table += '<tr><td>{}</td><td>{:.2f}</td><td>{}</td></tr>'.format(
             stat, per90, render_percentile_box(int(perc))
         )
+    table += '</tbody>'
+    table += PERCENTILE_TABLE_THEAD.format(category_name='Passing Stats')
+    table += '<tbody>'
+    for stat, per90, perc in passing_stats_tuple:
+        table += '<tr><td>{}</td><td>{:.2f}</td><td>{}</td></tr>'.format(
+            stat, per90, render_percentile_box(int(perc))
+        )
+    table += '</tbody>'
+    table += PERCENTILE_TABLE_THEAD.format(category_name='Defending Stats')
+    table += '<tbody>'
+    for stat, per90, perc in defending_stats_tuple:
+        table += '<tr><td>{}</td><td>{:.2f}</td><td>{}</td></tr>'.format(
+            stat, per90, render_percentile_box(int(perc))
+    )
+    table += '</tbody>'
+    table += PERCENTILE_TABLE_THEAD.format(category_name='Possession Stats')
+    table += '<tbody>'
+    for stat, per90, perc in possession_stats_tuple:
+        table += '<tr><td>{}</td><td>{:.2f}</td><td>{}</td></tr>'.format(
+            stat, per90, render_percentile_box(int(perc))
+    )
+    table += '</tbody>'
+    table += PERCENTILE_TABLE_THEAD.format(category_name='Miscellaneous Stats')
+    table += '<tbody>'
+    for stat, per90, perc in misc_stats_tuple:
+        table += '<tr><td>{}</td><td>{:.2f}</td><td>{}</td></tr>'.format(
+            stat, per90, render_percentile_box(int(perc))
+    )
     table += '</tbody>'
     table += '</table>'
     st.html(stats_table_css)
