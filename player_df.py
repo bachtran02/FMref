@@ -1,16 +1,22 @@
+import copy
 import pandas as pd
-import streamlit as st
 from fm_mapping import *
-
 from df_processing import *
 
 class PlayerDF:
 
     MIN_MINUTES = 450
 
+    CENTERBACK          = 'Centerback'
+    FULLBACK            = 'Fullback'
+    MIDFIELDER          = 'Midfielder'
+    ATT_MID_WINGER      = 'Att-Mid/Winger'
+    FORWARD             = 'Forward'
+
     def __init__(self):
         self._raw_df = None
         self._df = None
+        self._percentile_dfs = None
         self._is_empty = True
 
     def is_empty(self):
@@ -41,14 +47,27 @@ class PlayerDF:
         self._df = add_custom_metrics(self._df)
         self._df = normalize_metrics(self._df)
 
+        # calculate & store percentiles for each position group
+        self._percentile_dfs = get_percentile_df_by_groups(self._df.copy())
+
     def add_team_poss(self, poss_df: pd.DataFrame):
         pass
 
     def get_dataframe(self):
         return self._df.copy()
+    
+    def get_percentile_dataframes(self):
+        return copy.deepcopy(self._percentile_dfs)
 
     def get_shape(self):
         return self._df.shape
+    
+    def get_player_row_by_id(self, player_uid: int) -> dict:
+        if player_uid not in self._df.index:
+            return None
+        row_dict = self._df.loc[player_uid].to_dict()
+        row_dict['uid'] = player_uid
+        return row_dict
     
     def get_player_by_name(self, player_name: str):
         matched_rows = self._df[self._df[PLAYER_NAME] == player_name]

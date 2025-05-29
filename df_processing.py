@@ -94,18 +94,60 @@ def add_custom_metrics(df: pd.DataFrame) -> pd.DataFrame:
 
     custom_metrics = {
         # FBref metrics
-        BLK_PAS_90: df[BLK_90] - df[BLK_SHT_90],
-        GLS_AST: df[GLS] + df[AST],
-        NP_G: df[GLS] - df[PEN_S],
-        NP_G_XA: (df[GLS] - df[PEN_S]) + df[XA],
-        CONV_OT_R: np.round(series_ratio_with_fallback(df[GLS_90], df[SHT_90]), 2), 
-        NP_XG_OP: np.round((df[GLS] - df[PEN_S]) - df[NP_XG]),
-        NP_XG_SHOT: np.round(series_ratio_with_fallback(df[NP_XG_90], df[SHOT_90]), 2),
-        TCK_INT : df[TCK_W] + df[INT],
+        BLK_PAS_90:     np.round(df[BLK_90] - df[BLK_SHT_90], 2),
+        GLS_AST:        np.round(df[GLS] + df[AST], 2),
+        NP_G:           np.round(df[GLS] - df[PEN_S], 2),
+        NP_G_XA:        np.round((df[GLS] - df[PEN_S]) + df[XA], 2),
+        CONV_OT_R:      np.round(series_ratio_with_fallback(df[GLS_90], df[SHT_90]), 2), 
+        NP_XG_OP:       np.round((df[GLS] - df[PEN_S]) - df[NP_XG]),
+        NP_XG_SHOT:     np.round(series_ratio_with_fallback(df[NP_XG_90], df[SHOT_90]), 2),
+        TCK_INT :       np.round(df[TCK_W] + df[INT], 2),
 
-        DEF_ACT: df[TCK_A] + df[INT] + df[FLS],
-        POSS_NET_90: np.round(df[POSS_WON_90] - df[POSS_LOST_90], 2),
-        PRES_R: np.round(series_ratio_with_fallback(df[PRES_C_90], df[PRES_A_90]), 2),
-        PR_PASSES_R: np.round(series_ratio_with_fallback(df[PR_PASSES_90], df[PS_C_90]), 2),
+        DEF_ACT:        np.round(df[TCK_A] + df[INT] + df[FLS], 2),
+        POSS_NET_90:    np.round(df[POSS_WON_90] - df[POSS_LOST_90], 2),
+        PRES_R:         np.round(series_ratio_with_fallback(df[PRES_C_90], df[PRES_A_90]), 2),
+        PR_PASSES_R:    np.round(series_ratio_with_fallback(df[PR_PASSES_90], df[PS_C_90]), 2),
     }
     return df.assign(**custom_metrics)
+
+def get_percentile_df_by_groups(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
+    """
+    Create a DataFrame with percentiles for each position group in the original DataFrame.
+    """
+
+    percentile_dfs = {}
+
+    # list of columns to keep for percentile dataframe
+    percentile_metrics = list(set().union(
+        PER90_PERCENTILE_STANDARD_STATS.keys(),
+        PER90_PERCENTILE_SHOOTING_STATS.keys(),
+        PER90_PERCENTILE_PASSING_STATS.keys(),
+        PER90_PERCENTILE_DEFENDING_STATS.keys(),
+        PER90_PERCENTILE_POSSESSION_STATS.keys(),
+        PER90_PERCENTILE_MISC_STATS.keys(),
+    ))
+    
+    position_groups = ['Centerback', 'Fullback', 'Midfielder', 'Att-Mid/Winger', 'Forward']
+    for group in position_groups:
+        
+        # filter the players for the current position group
+        filtered_df = df[df[group] == 1]        
+        # if dataframe is empty or has fewer than 100 rows then skip
+        if filtered_df.empty or filtered_df.shape[0] < 100:
+            continue
+
+        # only keep numeric columns for percentile calculation
+        percentiles = {}
+        for metric in percentile_metrics:
+            if metric not in filtered_df.columns or not pd.api.types.is_numeric_dtype(filtered_df[metric]):
+                continue
+
+            invert = metric in INVERTED_PERCENTILE_FIELDS
+            series = filtered_df[metric].rank(pct=True).apply(lambda x: to_percentile(x, invert))
+            percentiles[metric] = series
+
+        group_df = pd.DataFrame(percentiles, index=filtered_df.index)
+        percentile_dfs[group] = group_df
+
+    # st.write(percentile_dfs)
+    return percentile_dfs

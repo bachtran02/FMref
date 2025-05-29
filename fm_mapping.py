@@ -14,11 +14,12 @@ PLAYER_UID                  = 'UID'
 PLAYER_WEIGHT               = 'Weight'
 
 AER_A_90                    = 'Aer A/90'
+APPS                        = 'Apps'                            # appearances
 AST                         = 'Ast'
 ASTS_90                     = 'Asts/90'
 AV_RAT                      = 'Av Rat'
 BLK_90                      = 'Blk/90'
-BLK_PAS_90                  = 'Pass Blckd/90'                      # blocked passes per 90
+BLK_PAS_90                  = 'Pass Blckd/90'                   # blocked passes per 90
 BLK_SHT_90                  = 'Shts Blckd/90'
 CCC                         = 'CCC'
 CCC_90                      = 'CC Chance/90'

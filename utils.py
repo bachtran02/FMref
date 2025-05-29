@@ -104,26 +104,18 @@ def parse_position(position_str) -> tuple:
             positions[5] = 1
     return tuple(positions)
     
-def player_stats_to_tuple_data(player_stats: dict, stats_to_include: dict, df):
+def player_stats_to_tuple_data(player_data: dict, stats_to_include: dict, percentile_df: pd.DataFrame):
     """
     Convert player stats to a tuple of tuples for FBref-like HTML table rendering.
     """
 
+    percentiles = percentile_df.loc[player_data['uid']].to_dict()
+
     res = []
     for key in stats_to_include:
         percentile = 0
-        stat = player_stats.get(key, 0)
-        if stat is not None and not np.isnan(stat):
-            percentile = stats.percentileofscore(df[key], stat, kind='rank')
-            if np.isnan(percentile):
-                percentile = 0
-            percentile = round(percentile)
-
-            # Invert percentile for certain fields
-            if key in INVERTED_PERCENTILE_FIELDS:
-                percentile = 100 - percentile
-
-            percentile = max(1, min(99, percentile))
+        stat = player_data.get(key, 0)
+        percentile = percentiles[key]
 
         field_tuple = (stats_to_include[key], round(stat, 2), percentile)
         res.append(field_tuple)
@@ -134,6 +126,13 @@ def series_ratio_with_fallback(num: pd.Series, denom: pd.Series, fallback=0):
     Calculate series ratio with a fallback value if denominator is zero or NaN.
     """
     return np.where(denom != 0, num / denom, fallback)
+
+def to_percentile(value: float, invert: bool) -> int:
+    """Convert a 0–1 float to bounded percentile (1–99), with optional inversion."""
+    pct = value * 100
+    if invert:
+        pct = 100 - pct
+    return max(1, min(99, round(pct)))
 
 def render_percentile_box(perc):
     color = (
@@ -171,11 +170,11 @@ stats_table_css = """
         vertical-align: middle;
         background-color: #f5f5f5;
         border: 1px solid #888;
-        padding: 3px 4px;
+        padding: 2px 3px;
     }
 
     td {
-        padding: 3px 4px;
+        padding: 2px 3px;
         text-align: right;
         border-bottom: 1px solid #ddd;
         border-right: 1px solid #888;

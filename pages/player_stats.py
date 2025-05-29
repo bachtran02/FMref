@@ -96,10 +96,24 @@ def player_statistics_page():
     df = player_df.get_dataframe()
 
     # TODO: handle duplicate player names
-    player_names = df[PLAYER_NAME].sort_values()
-    player_name = st.selectbox(label='Select Player', options=player_names)
 
-    display_player_statistics(player_name)
+    player_id_name_map = df[PLAYER_NAME].to_dict()
+    selected_player_id = st.selectbox(
+        label='Select Player',
+        options = player_id_name_map.keys(),
+        format_func=lambda x: player_id_name_map[x],
+        help='Select a player to view their statistics'
+    )
+
+    player_data = player_df.get_player_row_by_id(selected_player_id)
+    print_player_basic_info(player_data)
+    print_player_summary(player_data)
+    print_percentile_table(player_data, player_df.get_percentile_dataframes())
+
+    # player_names = df[PLAYER_NAME].sort_values()
+    # player_name = st.selectbox(label='Select Player', options=player_names)
+
+    # display_player_statistics(player_name)
     # selected_metrics = st.multiselect(
     #     label='Select metrics to display',
     #     options=PER90_METRICS.keys(),
@@ -107,15 +121,6 @@ def player_statistics_page():
     # )
     # plot_player_pizza_chart(player_name, df, selected_metrics)
 
-def display_player_statistics(player_name: str):
-    assert 'player_df' in st.session_state
-    player_df: PlayerDF = st.session_state['player_df']
-
-    player_stats = player_df.get_player_by_name(player_name)
-
-    print_player_basic_info(player_name, player_stats)
-    print_player_summary(player_stats)
-    print_percentile_table(player_stats, player_df.get_dataframe())
 
 def plot_player_pizza_chart(player_name, df: pd.DataFrame, selected_metrics: list[str]):
 
