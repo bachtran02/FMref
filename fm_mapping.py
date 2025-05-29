@@ -17,12 +17,14 @@ AER_A_90                    = 'Aer A/90'
 APPS                        = 'Apps'                            # appearances
 AST                         = 'Ast'
 ASTS_90                     = 'Asts/90'
+ATT_MID_WINGER              = 'Att-Mid/Winger'
 AV_RAT                      = 'Av Rat'
 BLK_90                      = 'Blk/90'
 BLK_PAS_90                  = 'Pass Blckd/90'                   # blocked passes per 90
 BLK_SHT_90                  = 'Shts Blckd/90'
 CCC                         = 'CCC'
 CCC_90                      = 'CC Chance/90'
+CENTERBACK                  = 'Centerback'
 CH_C_90                     = 'Ch C/90'
 CLR_90                      = 'Clr/90'
 CONV_R                      = 'Conv %'                          # goals per shot
@@ -36,12 +38,15 @@ FA                          = 'FA'
 FA_90                       = 'FA/90'
 FLS                         = 'Fls'
 FLS_90                      = 'Fls/90'
+FORWARD                     = 'Forward'
+FULLBACK                    = 'Fullback'
 GL_MST                      = 'Gl Mst'
 GL_MST_90                   = 'Gl Mst/90'
 GLS                         = 'Gls'
 GLS_90                      = 'Gls/90'
 GLS_AST                     = 'Gls + Ast'
 GLS_AST_90                  = 'Gls + Ast/90'
+GOALKEEPER                  = 'Goalkeeper'
 HDR_R                       = 'Hdr %'
 HDRS_L_90                   = 'Hdrs L/90'
 HDRS_W_90                   = 'Hdrs W/90'
@@ -49,6 +54,7 @@ INT                         = 'Itc'
 INT_90                      = 'Int/90'
 K_HDRS_90                   = 'K Hdrs/90'
 K_TCK_90                    = 'K Tck/90'
+MIDFIELDER                  = 'Midfielder'
 MINS                        = 'Mins'
 NP_G                        = 'NP-G'                           # non-penalty goals
 NP_G_90                     = 'NP-G/90'
@@ -212,92 +218,210 @@ CUSTOM_FIELDS = (
     YEL_90,
 )
 
-PER90_PERCENTILE_STANDARD_STATS = {
-    GLS_90: 'Goals',
-    ASTS_90: 'Assists',
-    GLS_AST_90: 'Goals + Assists',
-    NP_G_90: 'Non-Penalty Goals',
-    PEN_S_90: 'Penalty Kicks Made',
-    PENS_90: 'Penalty Kicks Attempted',
-    YEL_90: 'Yellow Cards',
-    RED_90: 'Red Cards',
-    XG_90: 'xG: Expected Goals',
-    NP_XG_90: 'npxG: Non-Penalty XG',
-    XA_90: 'xA: Expected Assists',
-    NP_G_XA_90: 'npxG + xA',
-    PR_PASSES_90: 'Progressive Passes',
+PER90_METRICS_READABLE_NAME_MAPPING = {
+    AER_A_90:           ('Aerials Attempted', 'Aerial Duels\nAttempted'),
+    ASTS_90:            ('Assists', 'Assists'),
+    BLK_90:             ('Blocks', 'Blocks'),
+    BLK_PAS_90:         ('Passes Blocked', 'Passes\nBlocked'),
+    BLK_SHT_90:         ('Shots Blocked', 'Shots\nBlocked'),
+    CH_C_90:            ('Chances Created', 'Chances\nCreated'),
+    CLR_90:             ('Clearances', 'Clearances'),
+    CONV_OT_R:          ('Goals/Shot on Target', 'Goals/Shot OT'),
+    CONV_R:             ('Goals/Shot', 'Goals/Shot'),
+    DEF_ACT_90:         ('Defensive Actions', 'Defensive\nActions'),
+    DIST_90:            ('Distance Covered', 'Distance\nCovered'),
+    DRB_90:             ('Dribbles', 'Dribbles'),
+    FA_90:              ('Fouls Drawn', 'Fouls\nDrawn'),
+    FLS_90:             ('Fouls Committed', 'Fouls\nCommitted'),
+    GLS_90:             ('Goals', 'Goals'),
+    GLS_AST_90:         ('Goals + Assists', 'Goals + Assists'),
+    HDRS_L_90:          ('Aerials Lost', 'Aerials\nLost'),
+    HDRS_W_90:          ('Aerials Won', 'Aerials\nWon'),
+    HDR_R:              ('% Aerials Won', '% Aerials Won'),
+    INT_90:             ('Interceptions', 'Interceptions'),
+    K_HDRS_90:          ('Key Headers', 'Key Headers'),
+    K_TCK_90:           ('Key Tackles', 'Key Tackles'),
+    NP_G_90:            ('Non-Penalty Goals', 'Non-Penalty\nGoals'),
+    NP_G_XA_90:         ('npxG + xA', 'npxG + xA'),
+    NP_XG_90:           ('npxG: Non-Penalty XG', 'Non-Penalty XG'),
+    NP_XG_OP_90:        ('Non-Penalty Goals - npxG', 'npxG\nOverperformance'),
+    NP_XG_SHOT:         ('npxG/Shot', 'npxG/Shot'),
+    OFF_90:             ('Offsides', 'Offsides'),
+    OP_CRS_A_90:        ('Open-play Crosses Attempted', 'Open-play\nCrosses\nAttempted'),
+    OP_CRS_C_90:        ('Open-play Crosses Completed', 'Open-play\nCrosses\nCompleted'),
+    OP_CR_R:            ('Open-play Crosses %', 'Open-play\nCrosses %'),
+    OP_KP_90:           ('Open-play Key Passes', 'Open-play\nKey Passes'),
+    PAS_R:              ('Pass Completion %', 'Pass\nCompletion %'),
+    PEN_S_90:           ('Penalty Kicks Made', 'Penalty Kicks\nMade'),
+    PENS_90:            ('Penalty Kicks Attempted', 'Penalty Kicks\nAttempted'),
+    PENS_R:             ('Penalty Kicks %', 'Penalty Kicks %'),
+    POSS_LOST_90:       ('Possession Lost', 'Possession\nLost'),
+    POSS_NET_90:        ('Net Possession Gain', 'Possession\nNet'),
+    POSS_WON_90:        ('Possession Won', 'Possession\nWon'),
+    PR_PASSES_90:       ('Progressive Passes', 'Progressive\nPasses'),
+    PR_PASSES_R:        ('Progressive Passes %', 'Progressive\nPasses %'),
+    PRES_A_90:          ('Pressures Applied', 'Pressures\nApplied'),
+    PRES_C_90:          ('Pressures Completed', 'Pressures\nCompleted'),
+    PRES_R:             ('Pressure Success %', 'Pressure\nSuccess %'),
+    PS_A_90:            ('Passes Attempted', 'Passes\nAttempted'),
+    PS_C_90:            ('Passes Completed', 'Passes\nCompleted'),
+    RED_90:             ('Red Cards', 'Red Cards'),
+    SHOT_90:            ('Shots', 'Shots'),
+    SHOT_R:             ('Shots On Target %', 'Shots\nOn Target %'),
+    SHT_90:             ('Shots On Target', 'Shots\nOn Target'),
+    SPRINTS_90:         ('Sprints', 'Sprints'),
+    TCK_90:             ('Tackles Won', 'Tackles Won'),
+    TCK_A_90:           ('Tackles', 'Tackles'),
+    TCK_INT_90:         ('Tkl + Int', 'Tkl + Int'),
+    TCK_R:              ('Tackle Success %', 'Tackle Success %'),
+    XA_90:              ('xA: Expected Assists', 'Expected\nAssists'),
+    XG_90:              ('xG: Expected Goals', 'xG'),
+    XG_OP_90:           ('Goals - xG', 'xG\nOverperformance'),
+    YEL_90:             ('Yellow Cards', 'Yellow Cards'),
 }
 
-PER90_PERCENTILE_SHOOTING_STATS = {
-    GLS_90: 'Goals',
-    SHOT_90: 'Shots',
-    SHT_90: 'Shots on Target',
-    SHOT_R: 'Shots On Target %',
-    CONV_R: 'Goals/Shot',
-    CONV_OT_R: 'Goals/Shot on Target',
-    PEN_S_90: 'Penalty Kicks Made',
-    PENS_90: 'Penalty Kicks Attempted',
-    PENS_R: 'Penalty Kicks %',
-    XG_90: 'xG: Expected Goals',
-    NP_XG_90: 'npxG: Non-Penalty XG',
-    NP_XG_SHOT: 'npxG/Shot',
-    XG_OP_90: 'Goals - xG',
-    NP_XG_OP_90: 'Non-Penalty Goals - npxG',
+PER90_METRICS_PIZZA_DISPLAY = {
+    GLS_90:           {'type': 'att', 'display': 'Goals'},
+    XG_90:            {'type': 'att', 'display': 'xG'},
+    NP_XG_90:         {'type': 'att', 'display': 'Non-penalty\nxG'},
+    SHOT_90:          {'type': 'att', 'display': 'Shots'},
+    SHOT_R:           {'type': 'att', 'display': 'Shot\nOn Target %'},
+    CONV_R:           {'type': 'att', 'display': 'Conversion %'},
+    XG_OP_90:         {'type': 'att', 'display': 'xG\nOverperformance'},
+
+    ASTS_90:          {'type': 'att', 'display': 'Assists'},
+    XA_90:            {'type': 'att', 'display': 'Expected\nAssists'},
+    PS_A_90:          {'type': 'pos', 'display': 'Passes\nAttempted'},
+    PAS_R:            {'type': 'pos', 'display': 'Pass\nCompletion %'},
+    PS_C_90:          {'type': 'pos', 'display': 'Passes\nCompleted'},
+    PR_PASSES_90:     {'type': 'pos', 'display': 'Progressive\nPasses'},
+    PR_PASSES_R:      {'type': 'pos', 'display': 'Progressive\nPasses %'},
+    OP_KP_90:         {'type': 'att', 'display': 'Open-play\nKey Passes'},
+    OP_CRS_A_90:      {'type': 'att', 'display': 'Open-play\nCrosses\nAttempted'},
+    OP_CR_R:          {'type': 'att', 'display': 'Open-play\nCross %'},
+    OP_CRS_C_90:      {'type': 'att', 'display': 'Open-play\nCrosses\nCompleted'},
+    CH_C_90:          {'type': 'att', 'display': 'Chances\nCreated'},
+    DRB_90:           {'type': 'pos', 'display': 'Dribbles\nCompleted'},
+    POSS_WON_90:      {'type': 'pos', 'display': 'Possession\nWon'},
+    POSS_LOST_90:     {'type': 'pos', 'display': 'Possession\nLost'},
+    POSS_NET_90:      {'type': 'pos', 'display': 'Possession\nNet'},
+    FA_90:            {'type': 'pos', 'display': 'Fouls Against'},
+
+    TCK_90:           {'type': 'def', 'display': 'Tackles Won'},
+    TCK_R:            {'type': 'def', 'display': 'Tackle Won %'},
+    K_TCK_90:         {'type': 'def', 'display': 'Key Tackles'},
+    TCK_A_90:         {'type': 'def', 'display': 'Tackles\nAttempted'},
+    BLK_90:           {'type': 'def', 'display': 'Blocks'},
+    INT_90:           {'type': 'def', 'display': 'Interceptions'},
+    CLR_90:           {'type': 'def', 'display': 'Clearances'},
+    DEF_ACT_90:       {'type': 'def', 'display': 'Defensive\nActions'},
+    AER_A_90:         {'type': 'def', 'display': 'Aerial Duels\nAttempted'},
+    HDR_R:            {'type': 'def', 'display': 'Headers\nWon %'},
+    HDRS_W_90:        {'type': 'def', 'display': 'Headers\nWon'},
+    HDRS_L_90:        {'type': 'def', 'display': 'Headers\nLost'},
+    K_HDRS_90:        {'type': 'def', 'display': 'Key Headers'},
+    PRES_A_90:        {'type': 'def', 'display': 'Pressures\nAttempted'},
+    PRES_C_90:        {'type': 'def', 'display': 'Pressures\nCompleted'},
+    PRES_R:           {'type': 'def', 'display': 'Pressures\n Completed %'},
+    SPRINTS_90:       {'type': 'def', 'display': 'High-intensity\nSprints'},
+    DIST_90:          {'type': 'def', 'display': 'Distance\nCovered'},
+    FLS_90:           {'type': 'def', 'display': 'Fouls Made'},
 }
 
-PER90_PERCENTILE_PASSING_STATS = {
-    PS_C_90: 'Passes Completed',
-    PS_A_90: 'Passes Attempted',
-    PAS_R: 'Pass Completion %',
-    ASTS_90: 'Assists',
-    XA_90: 'xA: Expected Assists',
-    OP_KP_90: 'Open-play Key Passes',
-    CH_C_90: 'Chances Created',
-    OP_CRS_C_90: 'Open-play Crosses Completed',
-    OP_CRS_A_90: 'Open-play Crosses Attempted',
-    OP_CR_R: 'Open-play Crosses %',
-    PR_PASSES_90: 'Progressive Passes',
-}
+PER90_PERCENTILE_STANDARD_STATS = (
+    GLS_90,
+    ASTS_90,
+    GLS_AST_90,
+    NP_G_90,
+    PEN_S_90,
+    PENS_90,
+    YEL_90,
+    RED_90,
+    XG_90,
+    NP_XG_90,
+    XA_90,
+    NP_G_XA_90,
+    PR_PASSES_90,
+)
 
-PER90_PERCENTILE_DEFENDING_STATS = {
-    TCK_A_90: 'Tackles',
-    TCK_90: 'Tackles Won',
-    TCK_R: 'Tackle Success %',
-    K_TCK_90: 'Key Tackles',
-    BLK_90: 'Blocks',
-    BLK_SHT_90: 'Shots Blocked',
-    BLK_PAS_90: 'Passes Blocked',
+PER90_PERCENTILE_SHOOTING_STATS = (
+    GLS_90,
+    SHOT_90,
+    SHT_90,
+    SHOT_R,
+    CONV_R,
+    CONV_OT_R,
+    PEN_S_90,
+    PENS_90,
+    PENS_R,
+    XG_90,
+    NP_XG_90,
+    NP_XG_SHOT,
+    XG_OP_90,
+    NP_XG_OP_90,
+)
 
-    INT_90: 'Interceptions',
-    TCK_INT_90: 'Tkl + Int',
-    CLR_90: 'Clearances',
-    PRES_A_90: 'Pressures Applied',
-    PRES_C_90: 'Pressures Completed',
-    PRES_R: 'Pressure Success %',
-}
+PER90_PERCENTILE_PASSING_STATS = (
+    PS_C_90,
+    PS_A_90,
+    PAS_R,
+    ASTS_90,
+    XA_90,
+    OP_KP_90,
+    CH_C_90,
+    OP_CRS_C_90,
+    OP_CRS_A_90,
+    OP_CR_R,
+    PR_PASSES_90,
+)
 
-PER90_PERCENTILE_POSSESSION_STATS = {
-    DRB_90: 'Dribbles',
-    POSS_WON_90: 'Possession Won',
-    POSS_LOST_90: 'Possession Lost',
-    POSS_NET_90: 'Net Possession Gain',
-}
+PER90_PERCENTILE_DEFENDING_STATS = (
+    TCK_A_90,
+    TCK_90,
+    TCK_R,
+    K_TCK_90,
+    BLK_90,
+    BLK_SHT_90,
+    BLK_PAS_90,
+    INT_90,
+    TCK_INT_90,
+    CLR_90,
+    PRES_A_90,
+    PRES_C_90,
+    PRES_R,
+)
 
-PER90_PERCENTILE_MISC_STATS = {
-    YEL_90: 'Yellow Cards',
-    RED_90: 'Red Cards',
-    FLS_90: 'Fouls Committed',
-    FA_90: 'Fouls Drawn',
-    OFF_90: 'Offsides',
-    DIST_90: 'Distance Covered',
-    SPRINTS_90: 'Sprints',
-    AER_A_90: 'Aerials Attempted',
-    HDRS_W_90: 'Aerials Won',
-    HDRS_L_90: 'Aerials Lost',
-    HDR_R: '% Aerials Won',
-    K_HDRS_90: 'Key Headers',
-}
+PER90_PERCENTILE_POSSESSION_STATS = (
+    DRB_90,
+    POSS_WON_90,
+    POSS_LOST_90,
+    POSS_NET_90,
+)
+
+PER90_PERCENTILE_MISC_STATS = (
+    YEL_90,
+    RED_90,
+    FLS_90,
+    FA_90,
+    OFF_90,
+    DIST_90,
+    SPRINTS_90,
+    AER_A_90,
+    HDRS_W_90,
+    HDRS_L_90,
+    HDR_R,
+    K_HDRS_90,
+)
+
+PER90_OTHER_STATS = (
+    PR_PASSES_R,
+    DEF_ACT_90,
+)
 
 INVERTED_PERCENTILE_FIELDS = (
     YEL_90, RED_90, POSS_LOST_90, FLS_90, OFF_90, HDRS_L_90,
+)
+
+POSITION_GROUPS = (
+    CENTERBACK, FULLBACK, MIDFIELDER, ATT_MID_WINGER, FORWARD
 )

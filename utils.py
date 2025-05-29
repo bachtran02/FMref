@@ -117,7 +117,7 @@ def player_stats_to_tuple_data(player_data: dict, stats_to_include: dict, percen
         stat = player_data.get(key, 0)
         percentile = percentiles[key]
 
-        field_tuple = (stats_to_include[key], round(stat, 2), percentile)
+        field_tuple = (PER90_METRICS_READABLE_NAME_MAPPING[key][0], round(stat, 2), percentile)
         res.append(field_tuple)
     return res
     

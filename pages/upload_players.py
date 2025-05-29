@@ -4,7 +4,7 @@ import numpy as np
 
 from player_df import PlayerDF
 
-def player_dataframe_page():
+def player_upload_page():
     
     assert 'player_df' in st.session_state
     player_df: PlayerDF = st.session_state['player_df']

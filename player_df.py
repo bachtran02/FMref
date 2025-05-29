@@ -7,12 +7,6 @@ class PlayerDF:
 
     MIN_MINUTES = 450
 
-    CENTERBACK          = 'Centerback'
-    FULLBACK            = 'Fullback'
-    MIDFIELDER          = 'Midfielder'
-    ATT_MID_WINGER      = 'Att-Mid/Winger'
-    FORWARD             = 'Forward'
-
     def __init__(self):
         self._raw_df = None
         self._df = None
@@ -50,9 +44,6 @@ class PlayerDF:
         # calculate & store percentiles for each position group
         self._percentile_dfs = get_percentile_df_by_groups(self._df.copy())
 
-    def add_team_poss(self, poss_df: pd.DataFrame):
-        pass
-
     def get_dataframe(self):
         return self._df.copy()
     
@@ -68,19 +59,3 @@ class PlayerDF:
         row_dict = self._df.loc[player_uid].to_dict()
         row_dict['uid'] = player_uid
         return row_dict
-    
-    def get_player_by_name(self, player_name: str):
-        matched_rows = self._df[self._df[PLAYER_NAME] == player_name]
-        return matched_rows.iloc[0].to_dict() if not matched_rows.empty else {}
-    
-    def get_player_percentiles_by_name(self, player_name: str):
-        player = self.get_player_by_name(player_name)
-        if not player:
-            return {}
-        
-        percentiles = {}
-        for col in self._df.columns:
-            if col in PRESET_PERCENT_FIELDS:
-                percentiles[col] = self._df[col].rank(pct=True).loc[player[PLAYER_UID]]
-        
-        return percentiles

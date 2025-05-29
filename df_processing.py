@@ -119,17 +119,16 @@ def get_percentile_df_by_groups(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
 
     # list of columns to keep for percentile dataframe
     percentile_metrics = list(set().union(
-        PER90_PERCENTILE_STANDARD_STATS.keys(),
-        PER90_PERCENTILE_SHOOTING_STATS.keys(),
-        PER90_PERCENTILE_PASSING_STATS.keys(),
-        PER90_PERCENTILE_DEFENDING_STATS.keys(),
-        PER90_PERCENTILE_POSSESSION_STATS.keys(),
-        PER90_PERCENTILE_MISC_STATS.keys(),
+        PER90_PERCENTILE_STANDARD_STATS,
+        PER90_PERCENTILE_SHOOTING_STATS,
+        PER90_PERCENTILE_PASSING_STATS,
+        PER90_PERCENTILE_DEFENDING_STATS,
+        PER90_PERCENTILE_POSSESSION_STATS,
+        PER90_PERCENTILE_MISC_STATS,
+        PER90_OTHER_STATS,
     ))
     
-    position_groups = ['Centerback', 'Fullback', 'Midfielder', 'Att-Mid/Winger', 'Forward']
-    for group in position_groups:
-        
+    for group in POSITION_GROUPS:
         # filter the players for the current position group
         filtered_df = df[df[group] == 1]        
         # if dataframe is empty or has fewer than 100 rows then skip
