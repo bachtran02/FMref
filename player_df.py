@@ -57,5 +57,5 @@ class PlayerDF:
         if player_uid not in self._df.index:
             return None
         row_dict = self._df.loc[player_uid].to_dict()
-        row_dict['uid'] = player_uid
+        row_dict[PLAYER_UID] = player_uid
         return row_dict

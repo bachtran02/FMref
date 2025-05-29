@@ -94,8 +94,8 @@ def player_compare_page():
 
 
 def plot_comparison_pizza_chart(player_1_data, player_2_data, percentile_df, selected_metrics):
-    player_1_percentiles = percentile_df.loc[player_1_data['uid'], selected_metrics].to_numpy()
-    player_2_percentiles = percentile_df.loc[player_2_data['uid'], selected_metrics].to_numpy()
+    player_1_percentiles = percentile_df.loc[player_1_data[PLAYER_UID], selected_metrics].to_numpy()
+    player_2_percentiles = percentile_df.loc[player_2_data[PLAYER_UID], selected_metrics].to_numpy()
 
     # construct readable selected metrics
     display_selected_metrics = []

@@ -109,7 +109,7 @@ def player_stats_to_tuple_data(player_data: dict, stats_to_include: dict, percen
     Convert player stats to a tuple of tuples for FBref-like HTML table rendering.
     """
 
-    percentiles = percentile_df.loc[player_data['uid']].to_dict()
+    percentiles = percentile_df.loc[player_data[PLAYER_UID]].to_dict()
 
     res = []
     for key in stats_to_include:
