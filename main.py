@@ -1,23 +1,25 @@
 import streamlit as st
 
-from pages.upload_players import upload_players_page
-from pages.input_poss import input_poss_page
-from pages.player_pizza import pizza_stats_page, pizza_comparison_page
+from player_df import PlayerDF
+
+from pages.player_compare import player_compare_page
+from pages.player_stats import player_statistics_page
+from pages.upload_players import player_upload_page
 
 from df_processing import *
 
 if __name__ == '__main__':
 
+    # initialize player dataframe if not exists
+    if 'player_df' not in st.session_state:
+        st.session_state['player_df'] = PlayerDF()
+
     pages = {
         '': [
-            st.Page(upload_players_page, title='Upload players file'),
-            st.Page(input_poss_page, title='Input possession'),
+            st.Page(player_upload_page, title='Player Dataframe', icon='⚽'),
+            st.Page(player_statistics_page, title='Player Statistics', icon='⚽'),
+            st.Page(player_compare_page, title='Player Comparison', icon='⚽')
         ], 
-        'Pizza Chart Visualizations': [
-            st.Page(pizza_stats_page, title='Player Stats'),
-            st.Page(pizza_comparison_page, title='Player Comparison')
-        ]
     }
-
     pg = st.navigation(pages)
     pg.run()

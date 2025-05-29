@@ -1,15 +1,11 @@
-# Note to make sure data is accurately represented
+# FMref
 
-# weight: cm
-# height: kg
+An [FBref](https://fbref.com/)-like, stats-oriented player analysis platform for [Football Manager 2024](https://www.footballmanager.com/).
 
-# salary: p/w
-# transfer value: £
+## Purposes:
+- Player Scouting
+- Comparison Tools
+- Metrics Visualizations
+- Find Similiar Players
 
-# short dist: yard
-# long dist: mile
-
-# decimal symbol: dot
-
-Similiar Players
-https://fbref.com/en/about/scouting-reports-explained#similar
+> README in progress!

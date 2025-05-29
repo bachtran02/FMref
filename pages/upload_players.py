@@ -2,57 +2,32 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-from df_processing import *
+from player_df import PlayerDF
 
-def upload_file() -> pd.DataFrame:
+def player_upload_page():
+    
+    assert 'player_df' in st.session_state
+    player_df: PlayerDF = st.session_state['player_df']
 
-    uploaded_file = st.file_uploader(
-        label='Upload players `.html` file',
-        type='html',
+    st.write('## Player Dataframe')
+    st.write("#### Upload player file")
+
+    _player_file = st.file_uploader(
+        label='Upload players `.html` file', type='html',
         help='Export file in Football Manager > Scouting > Players > Players in Range'
     )
 
-    # wait for file to be uploaded
-    if not uploaded_file:
+    # if there is no file uploaded yet
+    if _player_file is None and 'player_file' not in st.session_state:
         return
 
-    assert uploaded_file.name.endswith('.html') # check file extension
+    _player_file = _player_file or st.session_state['player_file']
+    st.session_state['player_file'] = _player_file
 
-    # TODO: better error handling here
-    dfs = pd.read_html(uploaded_file, encoding='utf8')
-    assert len(dfs) > 0
-    df = dfs[0]
-
-    # output dataframe's dimension & first few rows
-    st.write('Number of players:', df.shape[0])
-    st.write('Number of fields:', df.shape[1])
-    st.write('First few rows from raw dataframe')
-    st.write(df)
-
-    return df
-
-def upload_players_page():
-
-    st.write('## Upload players file')
+    player_df.init_df(_player_file)
+    df_shape = player_df.get_shape()
     
-    raw_df = upload_file()
-    
-    if raw_df is None:
-        return
-
-    df = raw_df.copy()
-    df = preprocess_df(df)
-
-    # only include players with at least 450 minutes
-    df = df[df['mins'] >= 450]
-
-    # further processing
-    df = normalize_metrics(df)
-    df = add_custom_metrics(df)
-
-    # st.write('Dataframe after preprocessing:')
-    st.write(df)
-
-    # Store the processed data in session_state
-    st.session_state["players_df"] = df
-    st.success("File uploaded and processed successfully!")
+    st.write("#### Player Dataframe")
+    st.write('Number of players:', df_shape[0])
+    st.write('Number of columns:', df_shape[1])
+    st.write(player_df.get_dataframe())
