@@ -16,8 +16,8 @@ if __name__ == '__main__':
 
     pages = {
         '': [
-            st.Page(player_dataframe_page, title='Player Dataframe'),
-            st.Page(player_statistics_page, title='Player Statistics'),
+            st.Page(player_dataframe_page, title='Player Dataframe', icon='⚽'),
+            st.Page(player_statistics_page, title='Player Statistics', icon='⚽'),
         ], 
     }
     pg = st.navigation(pages)
