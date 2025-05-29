@@ -58,8 +58,8 @@ MIDFIELDER                  = 'Midfielder'
 MINS                        = 'Mins'
 NP_G                        = 'NP-G'                           # non-penalty goals
 NP_G_90                     = 'NP-G/90'
-NP_G_XA                     = 'npxG + xAG'
-NP_G_XA_90                  = 'npxG + xAG/90'
+NP_XG_XA                    = 'npxG + xAG'
+NP_XG_XA_90                 = 'npxG + xAG/90'
 NP_XG                       = 'NP-xG'
 NP_XG_90                    = 'NP-xG/90'
 NP_XG_OP                    = 'npxG-OP'
@@ -203,11 +203,11 @@ CUSTOM_FIELDS = (
     GL_MST_90,
     NP_G,
     NP_G_90,
-    NP_G_XA,
-    NP_G_XA_90,
     NP_XG_OP,
     NP_XG_OP_90,
     NP_XG_SHOT,
+    NP_XG_XA,
+    NP_XG_XA_90,
     OFF_90,
     POSS_NET_90,
     PR_PASSES_R,
@@ -242,7 +242,7 @@ PER90_METRICS_READABLE_NAME_MAPPING = {
     K_HDRS_90:          ('Key Headers', 'Key Headers'),
     K_TCK_90:           ('Key Tackles', 'Key Tackles'),
     NP_G_90:            ('Non-Penalty Goals', 'Non-Penalty\nGoals'),
-    NP_G_XA_90:         ('npxG + xA', 'npxG + xA'),
+    NP_XG_XA_90:        ('npxG + xA', 'npxG + xA'),
     NP_XG_90:           ('npxG: Non-Penalty XG', 'Non-Penalty XG'),
     NP_XG_OP_90:        ('Non-Penalty Goals - npxG', 'npxG\nOverperformance'),
     NP_XG_SHOT:         ('npxG/Shot', 'npxG/Shot'),
@@ -340,7 +340,7 @@ PER90_PERCENTILE_STANDARD_STATS = (
     XG_90,
     NP_XG_90,
     XA_90,
-    NP_G_XA_90,
+    NP_XG_XA_90,
     PR_PASSES_90,
 )
 
