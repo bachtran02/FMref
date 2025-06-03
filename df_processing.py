@@ -71,7 +71,8 @@ def normalize_metrics(df: pd.DataFrame) -> pd.DataFrame:
     normalize_90_fn = lambda metric: np.round(series_ratio_with_fallback(df[metric] * 90, df[MINS]), 2)
     normalized_cols = {
         CCC_90: normalize_90_fn(CCC),
-        DEF_ACT_90: normalize_90_fn(DEF_ACT),
+        DEF_ACT_A_90: normalize_90_fn(DEF_ACT_A),
+        DEF_ACT_C_90: normalize_90_fn(DEF_ACT_C),
         FA_90: normalize_90_fn(FA),
         FLS_90: normalize_90_fn(FLS),
         GLS_AST_90: normalize_90_fn(GLS_AST),
@@ -97,18 +98,26 @@ def add_custom_metrics(df: pd.DataFrame) -> pd.DataFrame:
         BLK_PAS_90:     np.round(df[BLK_90] - df[BLK_SHT_90], 2),
         GLS_AST:        np.round(df[GLS] + df[AST], 2),
         NP_G:           np.round(df[GLS] - df[PEN_S], 2),
-        NP_XG_XA:        np.round(df[NP_XG] + df[XA], 2),
+        NP_XG_XA:       np.round(df[NP_XG] + df[XA], 2),
         CONV_OT_R:      np.round(series_ratio_with_fallback(df[GLS_90], df[SHT_90]), 2), 
         NP_XG_OP:       np.round((df[GLS] - df[PEN_S]) - df[NP_XG]),
         NP_XG_SHOT:     np.round(series_ratio_with_fallback(df[NP_XG_90], df[SHOT_90]), 2),
         TCK_INT :       np.round(df[TCK_W] + df[INT], 2),
 
-        DEF_ACT:        np.round(df[TCK_A] + df[INT] + df[FLS], 2),
+        DEF_ACT_C:      np.round(df[HDRS_W] + df[TCK_W] + df[INT] + df[BLK] + df[CLR]),
+        DEF_ACT_F:      np.round((df[AER_A] - df[HDRS_W]) + (df[TCK_A] - df[TCK_W]) + (df[PRES_A] - df[PRES_C]) + df[FLS], 2),
+
         POSS_NET_90:    np.round(df[POSS_WON_90] - df[POSS_LOST_90], 2),
         PRES_R:         np.round(series_ratio_with_fallback(df[PRES_C_90], df[PRES_A_90]), 2),
         PR_PASSES_R:    np.round(series_ratio_with_fallback(df[PR_PASSES_90], df[PS_C_90]), 2),
+
+        # % columns not correctly computed by FM
+        OP_CR_R:        np.round(series_ratio_with_fallback(df[OP_CRS_C_90], df[OP_CRS_A_90]), 2),
     }
-    return df.assign(**custom_metrics)
+    df = df.assign(**custom_metrics)
+    df[DEF_ACT_A] = np.round(df[DEF_ACT_C] + df[DEF_ACT_F], 2)
+    df[DEF_ACT_R] = np.round(series_ratio_with_fallback(df[DEF_ACT_C], df[DEF_ACT_A]), 2)
+    return df
 
 def get_percentile_df_by_groups(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
     """
@@ -125,7 +134,6 @@ def get_percentile_df_by_groups(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
         PER90_PERCENTILE_DEFENDING_STATS,
         PER90_PERCENTILE_POSSESSION_STATS,
         PER90_PERCENTILE_MISC_STATS,
-        PER90_OTHER_STATS,
     ))
     
     for group in POSITION_GROUPS:

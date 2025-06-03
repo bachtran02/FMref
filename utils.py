@@ -1,7 +1,6 @@
 import re
 import numpy as np
 import pandas as pd
-from scipy import stats
 
 from fm_mapping import *
 
@@ -155,37 +154,3 @@ def render_percentile_box(perc):
             </div>
         </div>
     '''
-    
-stats_table_css = """
-<style>
-    table {
-        border-collapse: collapse;
-        font-size: 14px;
-        border: 1px solid #888;
-    }
-
-    thead th {
-        font-weight: bold;
-        text-align: center;
-        vertical-align: middle;
-        background-color: #f5f5f5;
-        border: 1px solid #888;
-        padding: 2px 3px;
-    }
-
-    td {
-        padding: 2px 3px;
-        text-align: right;
-        border-bottom: 1px solid #ddd;
-        border-right: 1px solid #888;
-        vertical-align: middle;
-    }
-
-    td:last-child {
-        border-right: none;
-    }
-    tr:last-child td {
-        border-bottom: 1px solid #888;
-}
-</style>
-"""

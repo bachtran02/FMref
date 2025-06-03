@@ -21,6 +21,17 @@ PERCENTILE_TABLE_THEAD = """
     </thead>
 """
 
+SIMILAR_PLAYERS_TABLE_THEAD = """
+    <thead>
+        <tr>
+            <th>Rk</th>
+            <th>Player</th>
+            <th>Nat</th>
+            <th>Squad</th>
+        </tr>
+    </thead>
+"""
+
 def player_statistics_page():
     assert 'player_df' in st.session_state
     player_df: PlayerDF = st.session_state['player_df']
@@ -46,8 +57,9 @@ def player_statistics_page():
     player_data = player_df.get_player_row_by_id(selected_player_id)
     print_player_basic_info(player_data)
     print_player_summary(player_data)
-    print_percentile_table(player_data, perc_df)
-    print_similar_players(player_data, data_df, perc_df)
+    col1, col2 = st.columns([1, 1])
+    print_percentile_table(col1, player_data, perc_df)
+    print_similar_players(col2, player_data, data_df, perc_df)
 
 def print_player_basic_info(player_data: dict):
     """
@@ -72,15 +84,15 @@ def print_player_summary(player_data: dict):
         player_data.get(XG), player_data.get(NP_XG), player_data.get(XA)))
     st.text("")
     
-def print_percentile_table(player_data, percentile_dfs):
+def print_percentile_table(col, player_data, percentile_dfs):
     """
     Print player percentile table.
     """
-    st.write('##### Percentile Statistics')
+    col.write('##### Percentile Statistics')
 
     playable_position = [group for group in POSITION_GROUPS if player_data.get(group) == 1]
 
-    selected_group = st.segmented_control(
+    selected_group = col.segmented_control(
         label='Position Group to compare against',
         options=playable_position,
         selection_mode='single',
@@ -114,26 +126,24 @@ def print_percentile_table(player_data, percentile_dfs):
             )
         table += '</tbody>'
     table += '</table>'
-    st.html(stats_table_css)
-    st.html(table)
-    st.write('---')
+    col.html(table)
 
-def print_similar_players(player_data, player_df, percentile_dfs):
+def print_similar_players(col, player_data, player_df, percentile_dfs):
     # find top 5 most similar players
-    similar_players = find_similar_players(player_data, percentile_dfs, 5)
+    similar_players = find_similar_players(player_data, percentile_dfs, 10)
     similar_player_ids = similar_players.index.tolist()
 
-    similar_player_table = ''
-    similar_player_table += ('|   Rk   | Player | Nation | Squad  |\n')
-    similar_player_table += ('|:------:|:------:|:------:|:------:|\n')
+    col.write('##### Similar Players')
+    table = '<table>'
+    table += SIMILAR_PLAYERS_TABLE_THEAD
+    table += '<tbody>'
     for i, similar_player_id in enumerate(similar_player_ids):
         sim_player_dict = player_df.loc[similar_player_id].to_dict()
-
-        similar_player_table += '|{}|{}|{}|{}|\n'.format(
+        table += '<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(
             i + 1,
             sim_player_dict[PLAYER_NAME],
-            sim_player_dict[PLAYER_NAT],
-            sim_player_dict[PLAYER_CLUB])
-    
-    st.write('##### Similar Players')
-    st.write(similar_player_table)
+            sim_player_dict[PLAYER_CLUB],
+            sim_player_dict[PLAYER_POSITION])
+        table += '</tbody>'
+    table += '</table>'
+    col.html(table)

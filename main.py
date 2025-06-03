@@ -3,6 +3,7 @@ import streamlit as st
 from player_df import PlayerDF
 
 from pages.player_compare import player_compare_page
+from pages.player_search import player_search_by_percentile_page
 from pages.player_stats import player_statistics_page
 from pages.upload_players import player_upload_page
 
@@ -18,8 +19,15 @@ if __name__ == '__main__':
         '': [
             st.Page(player_upload_page, title='Player Dataframe', icon='⚽'),
             st.Page(player_statistics_page, title='Player Statistics', icon='⚽'),
-            st.Page(player_compare_page, title='Player Comparison', icon='⚽')
+            st.Page(player_compare_page, title='Player Comparison', icon='⚽'),
+            # st.Page(player_search_by_percentile_page, title='Player Search', icon='⚽'),
         ], 
     }
+
+    # render CSS
+    with open('./assets/style.css') as f:
+        css = f.read()
+    st.html(f'<style>{css}</style>')
+
     pg = st.navigation(pages)
     pg.run()

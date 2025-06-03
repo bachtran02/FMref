@@ -13,7 +13,7 @@ font_bold = FontManager(FONT_BOLD_FILE)
 DEFAULT_SELECTED_METRICS = [
     NP_XG_90, SHOT_90, SHOT_R, XA_90, CH_C_90, OP_KP_90,
     OP_CR_R, OP_CRS_A_90, DRB_90, PAS_R, PS_A_90, PR_PASSES_90,
-    PR_PASSES_R, POSS_WON_90, POSS_LOST_90, DEF_ACT_90, PRES_R, PRES_A_90,
+    PR_PASSES_R, POSS_WON_90, POSS_LOST_90, DEF_ACT_C_90, PRES_R, PRES_A_90,
     HDR_R, AER_A_90
 ]
 
@@ -79,7 +79,6 @@ def player_compare_page():
         PER90_PERCENTILE_DEFENDING_STATS,
         PER90_PERCENTILE_POSSESSION_STATS,
         PER90_PERCENTILE_MISC_STATS,
-        PER90_OTHER_STATS,
     ))
 
     percentile_metrics = sorted(percentile_metrics)  # sorted metrics for easier lookup

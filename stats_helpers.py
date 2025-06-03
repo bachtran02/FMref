@@ -3,7 +3,7 @@ import pandas as pd
 
 from fm_mapping import *
 
-def find_similar_players(player_data, percentile_dfs, top_n = 5):
+def find_similar_players(player_data, percentile_dfs, top_n = 10):
 
     target_id = player_data[PLAYER_UID]
     player_positions = [group for group in POSITION_GROUPS if player_data[group]]
