@@ -50,6 +50,9 @@ class PlayerDF:
     def get_percentile_dataframes(self):
         return copy.deepcopy(self._percentile_dfs)
 
+    def get_raw_dataframe(self):
+        return self._raw.copy()
+
     def get_shape(self):
         return self._df.shape
     

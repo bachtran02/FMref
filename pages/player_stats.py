@@ -67,7 +67,7 @@ def print_player_basic_info(player_data: dict):
     """
     st.write(f'#### {player_data.get(PLAYER_NAME)}')
     st.write(f'**Position:** {player_data.get(PLAYER_POSITION)} ▪  **Footed**: {player_data.get(PLAYER_PREFERRED_FOOT)}')
-    st.write(f'{player_data.get(PLAYER_HEIGHT)}cm, {player_data.get(PLAYER_WEIGHT)}kg')
+    st.write(f'**Height:** {player_data.get(PLAYER_HEIGHT)}cm ▪ **Weight:** {player_data.get(PLAYER_WEIGHT)}kg')
     st.write(f'**Age**: {player_data.get(PLAYER_AGE)}')
     st.write(f'**Nationality**: {player_data.get(PLAYER_NAT)}')
     st.write(f'**Club**: {player_data.get(PLAYER_CLUB)}')

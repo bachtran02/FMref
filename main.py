@@ -5,7 +5,7 @@ from player_df import PlayerDF
 from pages.player_compare import player_compare_page
 from pages.player_search import player_search_by_percentile_page
 from pages.player_stats import player_statistics_page
-from pages.upload_players import player_upload_page
+from pages.player_upload import player_upload_page
 
 from df_processing import *
 
