@@ -22,10 +22,10 @@ ATT_MID_WINGER              = 'Att-Mid/Winger'
 AV_RAT                      = 'Av Rat'
 BLK                         = 'Blk'
 BLK_90                      = 'Blk/90'
-BLK_PAS_90                  = 'Pass Blckd/90'                   # blocked passes per 90
-BLK_SHT_90                  = 'Shts Blckd/90'
+# BLK_PAS_90                  = 'Pass Blckd/90'                   # blocked passes per 90
+# BLK_SHT_90                  = 'Shts Blckd/90'
 CCC                         = 'CCC'
-CCC_90                      = 'CC Chance/90'
+CCC_90                      = 'CCC/90'
 CENTERBACK                  = 'Centerback'
 CH_C_90                     = 'Ch C/90'
 CLR                         = 'Clear'
@@ -55,6 +55,8 @@ GLS_90                      = 'Gls/90'
 GLS_AST                     = 'Gls + Ast'
 GLS_AST_90                  = 'Gls + Ast/90'
 GOALKEEPER                  = 'Goalkeeper'
+GLS_OUT_BOX                 = 'Goals Outside Box'
+GLS_OUT_BOX_90              = 'Goals Outside Box/90'
 HDR_R                       = 'Hdr %'
 # HDRS_L                      = 'Hdrs L'
 HDRS_L_90                   = 'Hdrs L/90'
@@ -104,6 +106,7 @@ RED                         = 'Red'
 RED_90                      = 'Red/90'
 SHOT_R                      = 'Shot %'
 SHOT_90                     = 'Shot/90'
+SHOT_OUT_BOX_90             = 'Shots Outside Box/90'
 SHT_90                      = 'ShT/90'                          # shots on target per 90
 SPRINTS_90                  = 'Sprints/90'
 TCK_A                       = 'Tck A'
@@ -148,7 +151,7 @@ PRESET_NUMERIC_FIELDS = (
     AV_RAT,
     BLK,
     BLK_90,
-    BLK_SHT_90,
+    # BLK_SHT_90,
     CCC,
     CH_C_90,
     CLR,
@@ -162,6 +165,7 @@ PRESET_NUMERIC_FIELDS = (
     GL_MST,
     GLS,
     GLS_90,
+    GLS_OUT_BOX,
     HDR_R,
     HDRS_L_90,
     HDRS_W,
@@ -195,6 +199,7 @@ PRESET_NUMERIC_FIELDS = (
     RED,
     SHOT_R,
     SHOT_90,
+    SHOT_OUT_BOX_90,
     SHT_90,
     SPRINTS_90,
     TCK_A,
@@ -215,8 +220,8 @@ PER90_METRICS_READABLE_NAME_MAPPING = {
     AER_A_90:           ('Aerials Attempted', 'Aerial Duels\nAttempted'),
     ASTS_90:            ('Assists', 'Assists'),
     BLK_90:             ('Blocks', 'Blocks'),
-    BLK_PAS_90:         ('Passes Blocked', 'Passes\nBlocked'),
-    BLK_SHT_90:         ('Shots Blocked', 'Shots\nBlocked'),
+    BLK_90:             ('Blocks', 'Blocks'),
+    CCC_90:             ('Clear-cut Chances Created', 'Clear-cut\nChances\nCreated'),
     CH_C_90:            ('Chances Created', 'Chances\nCreated'),
     CLR_90:             ('Clearances', 'Clearances'),
     CONV_OT_R:          ('Goals/Shot on Target', 'Goals/Shot OT'),
@@ -229,6 +234,7 @@ PER90_METRICS_READABLE_NAME_MAPPING = {
     FA_90:              ('Fouls Drawn', 'Fouls\nDrawn'),
     FLS_90:             ('Fouls Committed', 'Fouls\nCommitted'),
     GL_MST_90:          ('Errors Leading To Goal', 'Errors\nLeading\nTo Goal'),
+    GLS_OUT_BOX_90:     ('Goals Outside Box', 'Goals\nOutside\nBox'),
     GLS_90:             ('Goals', 'Goals'),
     GLS_AST_90:         ('Goals + Assists', 'Goals + Assists'),
     HDRS_L_90:          ('Aerials Lost', 'Aerials\nLost'),
@@ -265,6 +271,7 @@ PER90_METRICS_READABLE_NAME_MAPPING = {
     RED_90:             ('Red Cards', 'Red Cards'),
     SHOT_90:            ('Shots', 'Shots'),
     SHOT_R:             ('Shots On Target %', 'Shots\nOn Target %'),
+    SHOT_OUT_BOX_90:    ('Shot Outside Box', 'Shots\nOutside\nBox'),
     SHT_90:             ('Shots On Target', 'Shots\nOn Target'),
     SPRINTS_90:         ('Sprints', 'Sprints'),
     TCK_90:             ('Tackles Won', 'Tackles Won'),
@@ -300,6 +307,8 @@ PER90_PERCENTILE_SHOOTING_STATS = (
     SHOT_R,
     CONV_R,
     CONV_OT_R,
+    GLS_OUT_BOX_90,
+    SHOT_OUT_BOX_90,
     PEN_S_90,
     PENS_90,
     PENS_R,
@@ -319,6 +328,7 @@ PER90_PERCENTILE_PASSING_STATS = (
     K_PS_90,
     OP_KP_90,
     CH_C_90,
+    CCC_90,
     OP_CRS_C_90,
     OP_CRS_A_90,
     OP_CR_R,
@@ -331,8 +341,8 @@ PER90_PERCENTILE_DEFENDING_STATS = (
     TCK_R,
     K_TCK_90,
     BLK_90,
-    BLK_SHT_90,
-    BLK_PAS_90,
+    # BLK_SHT_90,
+    # BLK_PAS_90,
     INT_90,
     TCK_INT_90,
     CLR_90,

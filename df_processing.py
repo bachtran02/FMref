@@ -68,7 +68,7 @@ def parse_player_position(df: pd.DataFrame) -> pd.DataFrame:
     return df.join(pos_df)
 
 def normalize_metrics(df: pd.DataFrame) -> pd.DataFrame:
-    normalize_90_fn = lambda metric: np.round(series_ratio_with_fallback(df[metric] * 90, df[MINS]), 2)
+    normalize_90_fn = lambda metric: series_ratio_with_fallback(df[metric] * 90, df[MINS])
     normalized_cols = {
         CCC_90: normalize_90_fn(CCC),
         DEF_ACT_A_90: normalize_90_fn(DEF_ACT_A),
@@ -77,6 +77,7 @@ def normalize_metrics(df: pd.DataFrame) -> pd.DataFrame:
         FLS_90: normalize_90_fn(FLS),
         GLS_AST_90: normalize_90_fn(GLS_AST),
         GL_MST_90: normalize_90_fn(GL_MST),
+        GLS_OUT_BOX_90: normalize_90_fn(GLS_OUT_BOX),
         NP_G_90: normalize_90_fn(NP_G),
         NP_XG_XA_90: normalize_90_fn(NP_XG_XA),
         NP_XG_OP_90: normalize_90_fn(NP_XG_OP),
@@ -95,28 +96,28 @@ def add_custom_metrics(df: pd.DataFrame) -> pd.DataFrame:
 
     custom_metrics = {
         # FBref metrics
-        BLK_PAS_90:     np.round(df[BLK_90] - df[BLK_SHT_90], 2),
-        GLS_AST:        np.round(df[GLS] + df[AST], 2),
-        NP_G:           np.round(df[GLS] - df[PEN_S], 2),
-        NP_XG_XA:       np.round(df[NP_XG] + df[XA], 2),
-        CONV_OT_R:      np.round(series_ratio_with_fallback(df[GLS_90], df[SHT_90]), 2), 
-        NP_XG_OP:       np.round((df[GLS] - df[PEN_S]) - df[NP_XG]),
-        NP_XG_SHOT:     np.round(series_ratio_with_fallback(df[NP_XG_90], df[SHOT_90]), 2),
-        TCK_INT :       np.round(df[TCK_W] + df[INT], 2),
+        # BLK_PAS_90:     np.round(df[BLK_90] - df[BLK_SHT_90], 2),
+        GLS_AST:        df[GLS] + df[AST],
+        NP_G:           df[GLS] - df[PEN_S],
+        NP_XG_XA:       df[NP_XG] + df[XA],
+        CONV_OT_R:      series_ratio_with_fallback(df[GLS_90], df[SHT_90]), 
+        NP_XG_OP:       (df[GLS] - df[PEN_S]) - df[NP_XG],
+        NP_XG_SHOT:     series_ratio_with_fallback(df[NP_XG_90], df[SHOT_90]),
+        TCK_INT :       df[TCK_W] + df[INT],
 
-        DEF_ACT_C:      np.round(df[HDRS_W] + df[TCK_W] + df[INT] + df[BLK] + df[CLR]),
-        DEF_ACT_F:      np.round((df[AER_A] - df[HDRS_W]) + (df[TCK_A] - df[TCK_W]) + (df[PRES_A] - df[PRES_C]) + df[FLS], 2),
+        DEF_ACT_C:      df[HDRS_W] + df[TCK_W] + df[INT] + df[BLK] + df[CLR],
+        DEF_ACT_F:      (df[AER_A] - df[HDRS_W]) + (df[TCK_A] - df[TCK_W]) + (df[PRES_A] - df[PRES_C]) + df[FLS],
 
-        POSS_NET_90:    np.round(df[POSS_WON_90] - df[POSS_LOST_90], 2),
-        PRES_R:         np.round(series_ratio_with_fallback(df[PRES_C_90], df[PRES_A_90]), 2),
-        PR_PASSES_R:    np.round(series_ratio_with_fallback(df[PR_PASSES_90], df[PS_C_90]), 2),
+        POSS_NET_90:    df[POSS_WON_90] - df[POSS_LOST_90],
+        PRES_R:         series_ratio_with_fallback(df[PRES_C_90], df[PRES_A_90]),
+        PR_PASSES_R:    series_ratio_with_fallback(df[PR_PASSES_90], df[PS_C_90]),
 
         # % columns not correctly computed by FM
-        OP_CR_R:        np.round(series_ratio_with_fallback(df[OP_CRS_C_90], df[OP_CRS_A_90]), 2),
+        OP_CR_R:        series_ratio_with_fallback(df[OP_CRS_C_90], df[OP_CRS_A_90])
     }
     df = df.assign(**custom_metrics)
-    df[DEF_ACT_A] = np.round(df[DEF_ACT_C] + df[DEF_ACT_F], 2)
-    df[DEF_ACT_R] = np.round(series_ratio_with_fallback(df[DEF_ACT_C], df[DEF_ACT_A]), 2)
+    df[DEF_ACT_A] = df[DEF_ACT_C] + df[DEF_ACT_F]
+    df[DEF_ACT_R] = series_ratio_with_fallback(df[DEF_ACT_C], df[DEF_ACT_A])
     return df
 
 def get_percentile_df_by_groups(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
