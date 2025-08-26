@@ -4,12 +4,8 @@ import pandas as pd
 
 from fm_mapping import *
 
-FONT_NORMAL_FILE = 'https://raw.githubusercontent.com/googlefonts/roboto/main/src/hinted/Roboto-Regular.ttf'
-FONT_ITALIC_FILE = 'https://raw.githubusercontent.com/googlefonts/roboto/main/src/hinted/Roboto-Italic.ttf'
-FONT_BOLD_FILE = 'https://raw.githubusercontent.com/google/fonts/main/apache/robotoslab/RobotoSlab[wght].ttf'
-
 REGEX_HEIGHT_CM_PATTERN = r'(\d+)\scm'
-REGEX_HEIGHT_FT_PATTERN = r'(\d+)\'(\d+)\"'
+REGEX_HEIGHT_FT_PATTERN = r'(\d+)\'(\d+)"'
 REGEX_WEIGHT_KG_PATTERN = r'(\d+)\skg'
 REGEX_WEIGHT_LB_PATTERN = r'(\d+)\slb'
 
@@ -103,23 +99,6 @@ def parse_position(position_str) -> tuple:
             positions[5] = 1
     return tuple(positions)
     
-def player_stats_to_tuple_data(player_data: dict, stats_to_include: dict, percentile_df: pd.DataFrame):
-    """
-    Convert player stats to a tuple of tuples for FBref-like HTML table rendering.
-    """
-
-    percentiles = percentile_df.loc[player_data[PLAYER_UID]].to_dict()
-
-    res = []
-    for key in stats_to_include:
-        percentile = 0
-        stat = player_data.get(key, 0)
-        percentile = percentiles[key]
-
-        field_tuple = (PER90_METRICS_READABLE_NAME_MAPPING[key][0], round(stat, 2), percentile)
-        res.append(field_tuple)
-    return res
-    
 def series_ratio_with_fallback(num: pd.Series, denom: pd.Series, fallback=0):
     """
     Calculate series ratio with a fallback value if denominator is zero or NaN.
@@ -133,8 +112,9 @@ def to_percentile(value: float, invert: bool) -> int:
         pct = 100 - pct
     return max(1, min(99, round(pct)))
 
-def render_percentile_box(perc):
-    color = (
+def percentile_to_color(perc):
+    """ Returning color code based on percentile """
+    return ( 
         "#3aaf3a" if perc >= 90 else
         "#5caf5c" if perc >= 80 else
         "#66af66" if perc >= 70 else
@@ -146,11 +126,12 @@ def render_percentile_box(perc):
         "#af5f5f" if perc >= 10 else
         "#af3c3c"
     )
-    return f'''
-        <div style="display: flex;">
-            <div align="center" style="min-width: 22px; display: inline-block;">{perc}</div>
-            <div style="width: 200px;">
-                <div style="width: {perc}%; height: 100%; background-color: {color};"></div>
-            </div>
-        </div>
-    '''
+
+def load_css(file_path):
+    with open(file_path) as f:
+        css = f.read()
+    return f'<style>{css}</style>'
+
+def read_template(file_path):
+    with open(file_path) as f:
+        return f.read()

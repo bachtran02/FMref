@@ -1,9 +1,9 @@
 import pandas as pd
-import numpy as np
 
 from errors import *
 from fm_mapping import *
 from utils import *
+from config import POSITION_GROUPS, INVERTED_PERCENTILE_FIELDS
 
 def verify_dataframe_columns():
     pass

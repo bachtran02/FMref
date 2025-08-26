@@ -2,37 +2,14 @@ import streamlit as st
 
 from df_processing import *
 from player_df import PlayerDF
-from stats_helpers import find_similar_players
-
-STATS_SUMMARY_TABLE = """
-| MP     | Min    | Gls    | Ast    | xG     | npxG   |  xA    |
-|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
-| {}     | {}     | {}     | {}     | {}     | {}     | {}     |     
-"""
-
-PERCENTILE_TABLE_THEAD = """
-    <thead>
-        <tr><th colspan="3">{category_name}</th></tr>
-        <tr>
-            <th>Statistic</th>
-            <th>Per 90</th>
-            <th>Percentile</th>
-        </tr>
-    </thead>
-"""
-
-SIMILAR_PLAYERS_TABLE_THEAD = """
-    <thead>
-        <tr>
-            <th>Rk</th>
-            <th>Player</th>
-            <th>Nat</th>
-            <th>Squad</th>
-        </tr>
-    </thead>
-"""
+from stats_helpers import find_similar_players, player_stats_to_tuple_data
+from html_templates import (
+    render_summary_table, render_percentile_bar, percentile_table_thead,
+    similar_table_thead
+)
 
 def player_statistics_page():
+
     assert 'player_df' in st.session_state
     player_df: PlayerDF = st.session_state['player_df']
 
@@ -57,7 +34,9 @@ def player_statistics_page():
     player_data = player_df.get_player_row_by_id(selected_player_id)
     print_player_basic_info(player_data)
     print_player_summary(player_data)
-    col1, col2 = st.columns([1, 1])
+    
+    # percentile and similar table on same row
+    col1, col2 = st.columns([3, 2])
     print_percentile_table(col1, player_data, perc_df)
     print_similar_players(col2, player_data, data_df, perc_df)
 
@@ -67,11 +46,9 @@ def print_player_basic_info(player_data: dict):
     """
     st.write(f'#### {player_data.get(PLAYER_NAME)}')
     st.write(f'**Position:** {player_data.get(PLAYER_POSITION)} ▪  **Footed**: {player_data.get(PLAYER_PREFERRED_FOOT)}')
-    st.write(f'**Height:** {player_data.get(PLAYER_HEIGHT)}cm ▪ **Weight:** {player_data.get(PLAYER_WEIGHT)}kg')
-    st.write(f'**Age**: {player_data.get(PLAYER_AGE)}')
-    st.write(f'**Nationality**: {player_data.get(PLAYER_NAT)}')
-    st.write(f'**Club**: {player_data.get(PLAYER_CLUB)}')
-    st.write(f'**Wages**: £{round(player_data.get(PLAYER_SALARY)):,} Weekly')
+    st.write(f'**Age**: {player_data.get(PLAYER_AGE)} ▪ **Height:** {player_data.get(PLAYER_HEIGHT)}cm ▪ **Weight:** {player_data.get(PLAYER_WEIGHT)}kg')
+    st.write(f'**Club**: {player_data.get(PLAYER_CLUB)} ▪ **Nationality**: {player_data.get(PLAYER_NAT)}')
+    st.write(f'**Wages**: £{round(player_data[PLAYER_SALARY]):,} Weekly')
     st.write('---')
 
 def print_player_summary(player_data: dict):
@@ -79,32 +56,29 @@ def print_player_summary(player_data: dict):
     Print player statistics summary.
     """
     st.write('##### Statistics Summary')
-    st.write(STATS_SUMMARY_TABLE.format(
-        player_data.get(APPS), player_data.get(MINS), player_data.get(GLS), player_data.get(AST),
-        player_data.get(XG), player_data.get(NP_XG), player_data.get(XA)))
-    st.text("")
-    
-def print_percentile_table(col, player_data, percentile_dfs):
-    """
-    Print player percentile table.
-    """
-    col.write('##### Percentile Statistics')
-
-    playable_position = [group for group in POSITION_GROUPS if player_data.get(group) == 1]
-
-    selected_group = col.segmented_control(
-        label='Position Group to compare against',
-        options=playable_position,
-        selection_mode='single',
-        default=playable_position[0],
+    summary_table_html = '<table class="summary-table">'
+    summary_table_html += render_summary_table(
+        mp=player_data.get(APPS),
+        min=player_data.get(MINS),
+        gls=player_data.get(GLS),
+        ast=player_data.get(AST),
+        xg=player_data.get(XG),
+        npxg=player_data.get(NP_XG),
+        xa=player_data.get(XA)
     )
-
-    if not selected_group:
-        selected_group = playable_position[0]
+    summary_table_html += '</table>'
+    st.html(summary_table_html)
     
-    # ensure that selected option is valid position group
-    assert selected_group in POSITION_GROUPS
-    percentile_df = percentile_dfs[selected_group]
+def generate_percentile_table_html(player_data, percentile_df):
+
+    table = '''
+        <table class="percentile-table">
+        <colgroup>
+            <col style="width: 150px;">
+            <col style="width: 40px;">
+            <col style="width: 200px;">
+        </colgroup>
+    '''
 
     stats_dict = {
         'Standard': PER90_PERCENTILE_STANDARD_STATS,
@@ -115,35 +89,72 @@ def print_percentile_table(col, player_data, percentile_dfs):
         'Miscellaneous': PER90_PERCENTILE_MISC_STATS,
     }
 
-    table = '<table>'
     for stat_category in stats_dict:
         stat_tuple = player_stats_to_tuple_data(player_data, stats_dict[stat_category], percentile_df)
-        table += PERCENTILE_TABLE_THEAD.format(category_name=stat_category)
+        table += percentile_table_thead(stat_category)
         table += '<tbody>'
         for stat, per90, perc in stat_tuple:
             table += '<tr><td>{}</td><td>{:.2f}</td><td>{}</td></tr>'.format(
-                stat, per90, render_percentile_box(int(perc))
-            )
+                stat, per90, render_percentile_bar(int(perc)))
         table += '</tbody>'
     table += '</table>'
-    col.html(table)
+    return table
 
-def print_similar_players(col, player_data, player_df, percentile_dfs):
-    # find top 5 most similar players
-    similar_players = find_similar_players(player_data, percentile_dfs, 10)
-    similar_player_ids = similar_players.index.tolist()
-
-    col.write('##### Similar Players')
-    table = '<table>'
-    table += SIMILAR_PLAYERS_TABLE_THEAD
+def generate_similar_players_table_html(similar_players, player_df):
+    table = '<table class="similar-table">'
+    table += '''
+        <colgroup>
+            <col style="width: 20px;">
+            <col style="width: 130px;">
+            <col style="width: 100px;">
+            <col style="width: 100px;">
+        </colgroup>
+    '''
+    table += similar_table_thead()
     table += '<tbody>'
-    for i, similar_player_id in enumerate(similar_player_ids):
+    for i, (similar_player_id, row) in enumerate(similar_players.iterrows()):
         sim_player_dict = player_df.loc[similar_player_id].to_dict()
+        position_group = row['position']
         table += '<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(
             i + 1,
             sim_player_dict[PLAYER_NAME],
             sim_player_dict[PLAYER_CLUB],
-            sim_player_dict[PLAYER_POSITION])
+            position_group)
         table += '</tbody>'
     table += '</table>'
-    col.html(table)
+    return table
+
+def print_percentile_table(col, player_data, percentile_dfs):
+    """
+    Print player percentile table.
+    """
+    col.write('##### Percentile Statistics')
+
+    # get player's playable positions
+    playable_position = [group for group in POSITION_GROUPS if player_data.get(group) == 1]
+
+    selected_group = col.segmented_control(
+        label='Position Group to compare against',
+        options=playable_position,
+        selection_mode='single',
+        default=playable_position[0],
+    )
+
+    # select the first one by default
+    if not selected_group:
+        selected_group = playable_position[0]
+    
+    # ensure that selected option is valid position group
+    assert selected_group in POSITION_GROUPS
+    percentile_df = percentile_dfs[selected_group]
+
+    table_html = generate_percentile_table_html(player_data, percentile_df)
+    col.html(table_html)
+
+def print_similar_players(col, player_data, player_df, percentile_dfs):
+    # find top 5 most similar players
+    similar_players = find_similar_players(player_data, percentile_dfs, 10)
+
+    col.write('##### Similar Players')
+    table_html = generate_similar_players_table_html(similar_players, player_df)
+    col.html(table_html)

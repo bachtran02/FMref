@@ -4,18 +4,14 @@ import streamlit as st
 
 from fm_mapping import *
 from player_df import PlayerDF
-from utils import FONT_NORMAL_FILE, FONT_ITALIC_FILE, FONT_BOLD_FILE
+from config import (
+    DEFAULT_SELECTED_METRICS, POSITION_GROUPS,
+    FONT_NORMAL_FILE, FONT_ITALIC_FILE, FONT_BOLD_FILE
+)
 
 font_normal = FontManager(FONT_NORMAL_FILE)
 font_italic = FontManager(FONT_ITALIC_FILE)
 font_bold = FontManager(FONT_BOLD_FILE)
-
-DEFAULT_SELECTED_METRICS = [
-    GLS_90, NP_XG_90, SHOT_90, SHOT_R, XA_90, CH_C_90, OP_KP_90,
-    OP_CR_R, OP_CRS_A_90, DRB_90, PAS_R, PS_A_90, PR_PASSES_90,
-    PR_PASSES_R, POSS_WON_90, POSS_LOST_90, DEF_ACT_C_90, PRES_R, PRES_A_90,
-    HDR_R, AER_A_90
-]
 
 def player_compare_page():
     assert 'player_df' in st.session_state
@@ -70,6 +66,7 @@ def player_compare_page():
         selected_group = common_groups[0]
     
     percentile_dfs = player_df.get_percentile_dataframes()
+    assert percentile_dfs is not None
     percentile_df = percentile_dfs[selected_group]
 
     percentile_metrics = list(set().union(

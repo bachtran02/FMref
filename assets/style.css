@@ -1,13 +1,17 @@
 .stMainBlockContainer {
-    max-width:64rem;
-}
-    
-table {
-    border-collapse: collapse;
-    font-size: 14px;
-    border: 1px solid #888;
+    max-width: 50rem;
 }
 
+/* General table styling */
+table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: 12px;
+    width: 100%;
+    border: 1px solid #d3d3d3;
+}
+
+/* Table header styling */
 thead th {
     font-weight: bold;
     text-align: center;
@@ -30,5 +34,13 @@ td:last-child {
 }
 
 tr:last-child td {
-        border-bottom: 1px solid #888;
+    border-bottom: 1px solid #888;
+}
+
+table.summary-table {
+    width: 450px;
+}
+
+table.search-results-table {
+    width: 550px;
 }
