@@ -17,12 +17,15 @@ def player_compare_page():
     assert 'player_df' in st.session_state
     player_df: PlayerDF = st.session_state['player_df']
 
-    st.write('## Player Statistics')
+    st.write('## Player Comparison')
     if player_df.is_empty():
         st.warning('Please upload player file first.')
         return
 
     df = player_df.get_dataframe()
+    if df is None:
+        st.warning('Player dataframe is empty or not loaded correctly.')
+        return
     player_id_name_map = df[PLAYER_NAME].to_dict()
     
     selected_player_1_id = st.selectbox(
@@ -43,6 +46,9 @@ def player_compare_page():
 
     player_1_data = player_df.get_player_row_by_id(selected_player_1_id)
     player_2_data = player_df.get_player_row_by_id(selected_player_2_id)
+    if player_1_data is None or player_2_data is None:
+        st.warning('Error retrieving player data. Please try again.')
+        return
 
     # find common position groups
     common_groups = []
@@ -159,4 +165,7 @@ def plot_comparison_pizza_chart(player_1_data, player_2_data, percentile_df, sel
         ha="center",
     )
 
-    st.pyplot(fig)
+    # display the pizza chart
+    cols = st.columns([1, 6, 1])
+    with cols[1]:
+        st.pyplot(fig)

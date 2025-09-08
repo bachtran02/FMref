@@ -20,8 +20,13 @@ def player_upload_page():
         return
 
     if _player_file:
-        player_df.init_df(_player_file)
-        st.session_state['player_file'] = _player_file
+        try:
+            player_df.init_df(_player_file)
+            st.session_state['player_file'] = _player_file
+        except Exception as e:
+            print(f'Error processing player file: {e}')
+            st.warning(f'Error processing player file.')
+            return
 
     df_shape = player_df.get_shape()
     

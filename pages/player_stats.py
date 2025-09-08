@@ -19,6 +19,10 @@ def player_statistics_page():
         return
 
     df = player_df.get_dataframe()
+    if df is None:
+        st.warning('Player dataframe is empty or not loaded correctly.')
+        return
+    
     player_id_name_map = df[PLAYER_NAME].to_dict()
     
     selected_player_id = st.selectbox(
@@ -32,6 +36,10 @@ def player_statistics_page():
     perc_df = player_df.get_percentile_dataframes()
 
     player_data = player_df.get_player_row_by_id(selected_player_id)
+    if player_data is None:
+        st.warning('Error retrieving player data. Please try again.')
+        return
+    
     print_player_basic_info(player_data)
     print_player_summary(player_data)
     

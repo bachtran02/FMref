@@ -1,3 +1,11 @@
+class MissingColumnsError(Exception):
+    """Raised when the dataframe is missing required columns."""
+    pass
+
+class HeightWeightParsingError(Exception):
+    """Raised when there is an error parsing height or weight."""
+    pass
+
 class SalaryParsingError(Exception):
     """Raised when there is an error parsing salary or transfer value."""
     pass

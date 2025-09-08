@@ -1,5 +1,6 @@
 import copy
 import pandas as pd
+import typing as t
 from fm_mapping import *
 from df_processing import *
 
@@ -23,9 +24,6 @@ class PlayerDF:
             dfs = pd.read_html(uploaded_file, encoding='utf8')
             df = dfs[0]
 
-            print('Number of players:', df.shape[0])
-            print('Number of columns:', df.shape[1])
-
         except:
             # TODO: handle error here
             raise NotImplementedError
@@ -38,27 +36,42 @@ class PlayerDF:
         self._df = preprocess_df(self._df)
         self._df = self._df[self._df[MINS] >= self.MIN_MINUTES]   # filter out players who play fewer than MIN_MINUTES
         self._df = parse_player_position(self._df)
+
+        # TODO: handle goalkeepers, for now filter out
+        self._df = self._df[~(self._df[GOALKEEPER] == 1)]
+
         self._df = add_custom_metrics(self._df)
         self._df = normalize_metrics(self._df)
 
         # calculate & store percentiles for each position group
         self._percentile_dfs = get_percentile_df_by_groups(self._df.copy())
 
-    def get_dataframe(self):
-        return self._df.copy()
-    
-    def get_percentile_dataframes(self):
-        return copy.deepcopy(self._percentile_dfs)
+    def get_dataframe(self) -> t.Optional[pd.DataFrame]:
+        if not self.is_empty() and self._df is not None:
+            return self._df.copy()
+        return None
 
-    def get_raw_dataframe(self):
-        return self._raw.copy()
+    def get_percentile_dataframes(self) -> t.Optional[dict[str, pd.DataFrame]]:
+        if not self.is_empty() and self._percentile_dfs is not None:
+            return copy.deepcopy(self._percentile_dfs)
+        return None
 
-    def get_shape(self):
-        return self._df.shape
-    
-    def get_player_row_by_id(self, player_uid: int) -> dict:
-        if player_uid not in self._df.index:
-            return None
-        row_dict = self._df.loc[player_uid].to_dict()
-        row_dict[PLAYER_UID] = player_uid
-        return row_dict
+    def get_raw_dataframe(self) -> t.Optional[pd.DataFrame]:
+        if not self.is_empty() and self._raw is not None:
+            return self._raw.copy()
+        return None
+
+    def get_shape(self) -> tuple[int, int]:
+        if not self.is_empty() and self._df is not None:
+            return self._df.shape
+        return 0, 0
+
+    def get_player_row_by_id(self, player_uid: int) -> t.Optional[dict]:
+        if not self.is_empty() and self._df is not None:
+            if player_uid not in self._df.index:
+                return None
+            row_dict = self._df.loc[player_uid].to_dict()
+            # assign back player uid to dict
+            row_dict[PLAYER_UID] = player_uid
+            return row_dict
+        return None

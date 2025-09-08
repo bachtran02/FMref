@@ -1,5 +1,4 @@
 from utils import percentile_to_color
-from fm_mapping import PLAYER_NAME, PLAYER_NAT, PLAYER_CLUB, MINS
 
 def render_summary_table(mp, min, gls, ast, xg, npxg, xa):
     return f'''

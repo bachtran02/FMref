@@ -2,8 +2,6 @@ import re
 import numpy as np
 import pandas as pd
 
-from fm_mapping import *
-
 REGEX_HEIGHT_CM_PATTERN = r'(\d+)\scm'
 REGEX_HEIGHT_FT_PATTERN = r'(\d+)\'(\d+)"'
 REGEX_WEIGHT_KG_PATTERN = r'(\d+)\skg'
@@ -131,7 +129,3 @@ def load_css(file_path):
     with open(file_path) as f:
         css = f.read()
     return f'<style>{css}</style>'
-
-def read_template(file_path):
-    with open(file_path) as f:
-        return f.read()

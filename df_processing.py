@@ -9,12 +9,18 @@ def verify_dataframe_columns():
     pass
 
 def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
+    # check if required columns are present
+    required_columns = (
+        PLAYER_UID, MINS, PLAYER_HEIGHT, PLAYER_WEIGHT,
+        PLAYER_SALARY, PLAYER_TRANSFER_VALUE, DIST
+    )
+    missing_columns = [col for col in required_columns if col not in df.columns]
+    if missing_columns:
+        raise MissingColumnsError(f"Missing required columns: {', '.join(missing_columns)}")
 
-    df = df.drop(columns=['Rec', 'Inf'], errors='ignore')           # not useful for analysis
     df = df.dropna(subset=[PLAYER_UID])                             # drop rows with no player UID
-    df = df.drop(columns=[DIST_90])                                 # not exported correctly by FM24 (all zeros)
-
-    # TODO: ensure that dataframe has all the columns we need
+    df = df.drop(columns=['Rec', 'Inf'], errors='ignore')           # not useful for analysis
+    df = df.drop(columns=[DIST_90], errors='ignore')                # not exported correctly by FM24 (all zeros)
 
     # Drop all players that haven't played a single minute (Mins = '-')
     df = df[df[MINS] != '-']
@@ -29,25 +35,31 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
     df = df.sort_index()                                            # sort by player UID
     
     # transform weight columns
-    df[PLAYER_HEIGHT] = df[PLAYER_HEIGHT].apply(transform_height).astype(int)
-    df[PLAYER_WEIGHT] = df[PLAYER_WEIGHT].apply(transform_weight).astype(int)
+    try:
+        df[PLAYER_HEIGHT] = df[PLAYER_HEIGHT].apply(transform_height).astype(int)
+        df[PLAYER_WEIGHT] = df[PLAYER_WEIGHT].apply(transform_weight).astype(int)
+    except ValueError as e:
+        raise HeightWeightParsingError(f"Error processing height/weight: {e}") from e
 
     # TODO: handle salary/transfer value in different units
     try:
         # transform salary column
         df[PLAYER_SALARY] = df[PLAYER_SALARY].str.extract(r'£([\d,]+)\s*p/w')[0]
         df[PLAYER_SALARY] = df[PLAYER_SALARY].str.replace(',', '').astype(float)
-    except Exception as e:
+    except (AttributeError, ValueError) as e:
         raise SalaryParsingError(f"Error processing salary: {e}") from e
     try:
         # transform transfer value column
         df[PLAYER_MAX_TRANSFER_VALUE] = df[PLAYER_TRANSFER_VALUE].astype(str).apply(find_max_transfer_value_regex_func)
-    except Exception as e:
+    except ValueError as e:
         raise TransferValueParsingError(f"Error processing transfer value: {e}") from e
 
     # transform distance covered
-    df[DIST] = df[DIST].apply(transform_distance).astype(float)
-    df[DIST_90] = round(df[DIST] / df[MINS].astype(int) * 90, 2)
+    try:
+        df[DIST] = df[DIST].apply(transform_distance).astype(float)
+        df[DIST_90] = round(df[DIST] / df[MINS].astype(int) * 90, 2)
+    except ValueError as e:
+        raise DistanceParsingError(f"Error processing distance: {e}") from e
 
     preset_percent_fields  = list(PRESET_PERCENT_FIELDS)
     preset_numeric_fields = list(PRESET_NUMERIC_FIELDS)
