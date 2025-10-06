@@ -68,21 +68,8 @@ def similar_table_thead():
             <tr>
                 <th>Rk</th>
                 <th>Player</th>
-                <th>Squad</th>
-                <th>Position</th>
-            </tr>
-        </thead>
-    '''
-
-def search_results_table_thead():
-    return '''
-        <thead>
-            <tr>
-                <th>Rk</th>
-                <th>Player</th>
                 <th>Nation</th>
                 <th>Squad</th>
-                <th>Minutes</th>
             </tr>
         </thead>
     '''
