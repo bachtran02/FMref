@@ -2,10 +2,9 @@ import streamlit as st
 
 from df_processing import *
 from player_df import PlayerDF
-from stats_helpers import find_similar_players, player_stats_to_tuple_data
+from stats_helpers import find_similar_player_ids, player_stats_to_tuple_data
 from html_templates import (
-    render_summary_table, render_percentile_bar, percentile_table_thead,
-    similar_table_thead
+    render_summary_table, render_percentile_bar, percentile_table_thead, similar_table_thead
 )
 
 def player_statistics_page():
@@ -45,8 +44,8 @@ def player_statistics_page():
     
     # percentile and similar table on same row
     col1, col2 = st.columns([3, 2])
-    print_percentile_table(col1, player_data, perc_df)
-    print_similar_players(col2, player_data, data_df, perc_df)
+    selected_position_group = print_percentile_table(col1, player_data, perc_df)
+    print_similar_players(col2, player_data, data_df, perc_df, selected_position_group)
 
 def print_player_basic_info(player_data: dict):
     """
@@ -108,26 +107,26 @@ def generate_percentile_table_html(player_data, percentile_df):
     table += '</table>'
     return table
 
-def generate_similar_players_table_html(similar_players, player_df):
+def generate_similar_players_table_html(similar_player_ids, player_df):
     table = '<table class="similar-table">'
     table += '''
         <colgroup>
-            <col style="width: 20px;">
+            <col style="width: 25px;">
             <col style="width: 130px;">
-            <col style="width: 100px;">
-            <col style="width: 100px;">
+            <col style="width: 40px;">
+            <col style="width: 115px;">
         </colgroup>
     '''
     table += similar_table_thead()
     table += '<tbody>'
-    for i, (similar_player_id, row) in enumerate(similar_players.iterrows()):
+    for i, similar_player_id in enumerate(similar_player_ids):
         sim_player_dict = player_df.loc[similar_player_id].to_dict()
-        position_group = row['position']
         table += '<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(
             i + 1,
             sim_player_dict[PLAYER_NAME],
+            sim_player_dict[PLAYER_NAT],
             sim_player_dict[PLAYER_CLUB],
-            position_group)
+            )
         table += '</tbody>'
     table += '</table>'
     return table
@@ -159,10 +158,13 @@ def print_percentile_table(col, player_data, percentile_dfs):
     table_html = generate_percentile_table_html(player_data, percentile_df)
     col.html(table_html)
 
-def print_similar_players(col, player_data, player_df, percentile_dfs):
-    # find top 5 most similar players
-    similar_players = find_similar_players(player_data, percentile_dfs, 10)
+    # return selected position group
+    return selected_group
+
+def print_similar_players(col, player_data, player_df, percentile_dfs, position_group):
+    # find top 10 most similar players
+    similar_player_ids = find_similar_player_ids(player_data, percentile_dfs, position_group, 10)
 
     col.write('##### Similar Players')
-    table_html = generate_similar_players_table_html(similar_players, player_df)
+    table_html = generate_similar_players_table_html(similar_player_ids, player_df)
     col.html(table_html)
