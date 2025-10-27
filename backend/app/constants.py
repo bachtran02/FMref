@@ -1,3 +1,6 @@
+# ============================================================================
+# PLAYER INFO CONSTANTS
+# ============================================================================
 PLAYER_AGE                  = 'Age'
 PLAYER_BEST_POSITION        = 'Best Pos'
 PLAYER_CLUB                 = 'Club'
@@ -13,6 +16,10 @@ PLAYER_MAX_TRANSFER_VALUE   = 'Max Transfer Value'
 PLAYER_UID                  = 'UID'
 PLAYER_WEIGHT               = 'Weight'
 
+
+# ============================================================================
+# PRESET STATS (From FM24 Export)
+# ============================================================================
 AER_A                       = 'Hdrs A'
 AER_A_90                    = 'Aer A/90'
 APPS                        = 'Apps'
@@ -184,6 +191,24 @@ XG_SHOT                     = 'xG/shot'                         # Expected Goals
 XG_PV                       = 'xGP'                             # Expected Goal Prevented
 XG_PV_90                    = 'xGP/90'                          # Expected Goal Prevented Per 90
 XSV_R                       = 'xSv %'                           # Expected Save Percentage
-
 YEL                         = 'Yel'
 YEL_90                      = 'Yel/90'
+
+
+# ============================================================================
+# POSITION CONSTANTS
+# ============================================================================
+CENTERBACK                  = 'Centerback'
+FULLBACK                    = 'Fullback'
+MIDFIELDER                  = 'Midfielder'
+ATT_MID_WINGER              = 'Att-Mid/Winger'
+FORWARD                     = 'Forward'
+
+
+# ============================================================================
+# COLUMN GROUPINGS
+# ============================================================================
+PRESET_PERCENT_FIELDS = (SHOT_OT_R, CONV_R, PAS_R, OP_CR_R, TCK_R, HDR_R, PEN_SC_R)
+PRESET_NUMERIC_FIELDS = (AER_A, AER_A_90, AST, ASTS_90, AV_RAT, BLK, BLK_90, CCC, CH_C_90, CLR,
+    CLR_90, CONV_R, DIST, DIST_90, DRB_90, FLS_AGST, FLS, MST_GL, GLS, GLS_90, GLS_OUT_BOX,
+    HDR_R, HDRS_L_90, HDRS_W, HDRS_W_90)

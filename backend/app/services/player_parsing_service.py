@@ -1,6 +1,10 @@
 import pandas as pd
 
+from player_preprocessing_service import preprocess_player_dataframe, add_player_position_columns
+from utils import verify_columns
+
 from ..constants import *
+from ..errors.errors import InvalidFileError, MissingColumnsError
 
 REQUIRED_PLAYER_DATAFRAME_COLUMNS = {
     # Basic Player Info
@@ -22,25 +26,23 @@ REQUIRED_PLAYER_DATAFRAME_COLUMNS = {
 }
 
 
-def verify_columns(df, required_columns):
-    """Verify that the DataFrame contains all required columns."""
-    missing_columns = [col for col in required_columns if col not in df.columns]
-    if missing_columns:
-        print(f"Missing columns: {missing_columns}")
-        return False
-    return True
-
-def parse_player_html(file):
+def process_player_html(file):
     
     try:
-        df = pd.read_html(file.read())[0]
-        
-        if not verify_columns(df, REQUIRED_PLAYER_DATAFRAME_COLUMNS):
-            return None
+        tables = pd.read_html(file.read())
+        if not tables:
+            raise InvalidFileError("No tables found in HTML file")
+
+        raw_df = tables[0]
+        verify_columns(raw_df, REQUIRED_PLAYER_DATAFRAME_COLUMNS)
+
+        # extract only required columns
+        df = raw_df[list(REQUIRED_PLAYER_DATAFRAME_COLUMNS)].copy()
+        df = preprocess_player_dataframe(df)
+        df = add_player_position_columns(df)
 
         # Return only the required columns
-        return df[list(REQUIRED_PLAYER_DATAFRAME_COLUMNS)]
-        
-    except Exception as e:
-        print(f"Error parsing HTML: {e}")
         return None
+
+    except (MissingColumnsError, InvalidFileError) as e:
+        raise e

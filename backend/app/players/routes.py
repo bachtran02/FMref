@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from . import players_bp # Import the blueprint instance
-from ..services.parsing_service import parse_player_html
+from ..services.player_parsing_service import process_player_html
 from werkzeug.utils import secure_filename
 import pandas as pd
 
@@ -24,7 +24,7 @@ def handle_player_upload():
     df = None
     try:
         if extension == 'html':
-            df = parse_player_html(file)
+            df = process_player_html(file)
 
         if df is None:
             return jsonify({"error": "Could not parse file"}), 400
