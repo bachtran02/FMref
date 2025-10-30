@@ -26,8 +26,7 @@ def handle_player_upload():
         if extension == 'html':
             df = process_player_html(file)
 
-        if df is None:
-            return jsonify({"error": "Could not parse file"}), 400
+        assert df is not None
 
         # # Call specific player analysis logic
         # processed_df = calculate_player_percentiles(df)
@@ -39,4 +38,4 @@ def handle_player_upload():
         return jsonify({"message": "File processed successfully"}), 200
 
     except Exception as e:
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+        return jsonify({"error": f"Failed to process file: {str(e)}"}), 500

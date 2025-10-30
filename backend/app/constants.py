@@ -52,12 +52,12 @@ CRS_A_90                    = 'Crs A/90'                        # Cross Attempte
 CRS_C                       = 'Cr C'                            # Cross Completed
 CRS_C_90                    = 'Cr C/90'                         # Cross Completed Per 90
 CRS_R                       = 'Cr C/A'                          # Cross Completion Ratio
-DEF_ACT_A                   = 'Def Act A'
-DEF_ACT_A_90                = 'Def Act A/90'
-DEF_ACT_C                   = 'Def Act C'
-DEF_ACT_C_90                = 'Def Act C/90'
-DEF_ACT_F                   = 'Def Act F'
-DEF_ACT_F_90                = 'Def Act F/90'
+DEF_ACT_A                   = 'Def Act A'                       # Defensive Actions Attempted
+DEF_ACT_A_90                = 'Def Act A/90'                    # Defensive Actions Attempted Per 90
+DEF_ACT_C                   = 'Def Act C'                       # Defensive Actions Completed
+DEF_ACT_C_90                = 'Def Act C/90'                    # Defensive Actions Completed Per 90
+DEF_ACT_F                   = 'Def Act F'                       # Defensive Actions Failed
+DEF_ACT_F_90                = 'Def Act F/90'                    # Defensive Actions Failed Per 90
 DEF_ACT_R                   = 'Def Act %'
 DIST                        = 'Distance'
 DIST_90                     = 'Dist/90'
@@ -128,15 +128,16 @@ OP_CRS_C_90                 = 'OP-Crs C/90'                     # Open Play Cros
 OP_KP                       = 'OP-KP'                           # Open Play Key Passes
 OP_KP_90                    = 'OP-KP/90'                        # Open Play Key Passes Per 90
 PAS_R                       = 'Pas %'
-PEN_S                       = 'Pens S'
-PEN_S_90                    = 'Pens S/90'                       # penalty scored per 90
-PEN_90                      = 'Pens/90'                         # penalty attempted per 90
-PEN_ATT                     = 'Pens'                            # penalty attempted
-PEN_FAC                     = 'Pens Faced'                      # penalties faced
-PEN_SC_R                    = 'Pen/R'                           # penalty score rate
-PEN_SV                      = 'Pens Saved'                      # penalty saves
-PEN_SV_R                    = 'Pens Saved Ratio'                # penalty save rate
-POM                         = 'PoM'                             # player of the match won
+PEN_SC                      = 'Pens S'
+PEN_SC_90                   = 'Pens S/90'                       # Penalty scored per 90
+PEN_SC_R                    = 'Pen/R'                           # Penalty score rate
+PEN_90                      = 'Pens/90'                         # Penalty attempted per 90
+PEN_ATT                     = 'Pens'                            # Penalty attempted
+PEN_ATT_90                  = 'Pens Att/90'                     # Penalty attempted per 90
+PEN_FAC                     = 'Pens Faced'                      # Penalties faced
+PEN_SV                      = 'Pens Saved'                      # Penalty saves
+PEN_SV_R                    = 'Pens Saved Ratio'                # Penalty save rate
+POM                         = 'PoM'                             # Player of the Match won
 POSS_LOST_90                = 'Poss Lost/90'
 POSS_NET_90                 = 'Poss Net/90'
 POSS_WON_90                 = 'Poss Won/90'
@@ -208,7 +209,16 @@ FORWARD                     = 'Forward'
 # ============================================================================
 # COLUMN GROUPINGS
 # ============================================================================
-PRESET_PERCENT_FIELDS = (SHOT_OT_R, CONV_R, PAS_R, OP_CR_R, TCK_R, HDR_R, PEN_SC_R)
-PRESET_NUMERIC_FIELDS = (AER_A, AER_A_90, AST, ASTS_90, AV_RAT, BLK, BLK_90, CCC, CH_C_90, CLR,
-    CLR_90, CONV_R, DIST, DIST_90, DRB_90, FLS_AGST, FLS, MST_GL, GLS, GLS_90, GLS_OUT_BOX,
-    HDR_R, HDRS_L_90, HDRS_W, HDRS_W_90)
+PRESET_PERCENT_FIELDS = (
+    CONV_R, HDR_R, OP_CR_R, PAS_R, PEN_SC_R, SHOT_OT_R, TCK_R
+)
+
+PRESET_NUMERIC_FIELDS = (
+    AER_A, AER_A_90, AST, ASTS_90, AV_RAT, BLK, BLK_90, CCC, CH_C_90,
+    CLR, CLR_90, DRB_90, FLS, FLS_AGST, GLS, GLS_90, GLS_OUT_BOX,
+    HDRS_L_90, HDRS_W, HDRS_W_90, INT, INT_90, MINS, MST_GL, NP_XG,
+    NP_XG_90, OFF, OP_CRS_A_90, OP_CRS_C_90, PEN_ATT, PEN_SC,
+    POSS_LOST_90, POSS_WON_90, PR_PASSES_90, PRES_A, PRES_A_90, PRES_C,
+    PRES_C_90, PS_C_90, RED, SHOTS, SHOT_90, SHOT_OT, SHOT_OT_90, TCK_A,
+    TCK_C, XA, XG_OP, YEL
+)
