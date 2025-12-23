@@ -1,7 +1,7 @@
 import streamlit as st
 
 from df_processing import *
-from player_df import PlayerDF
+from models.player_dataset import PlayerDF
 from stats_helpers import find_similar_player_ids, player_stats_to_tuple_data
 from html_templates import (
     render_summary_table, render_percentile_bar, percentile_table_thead, similar_table_thead

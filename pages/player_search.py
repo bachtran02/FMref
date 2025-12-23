@@ -1,6 +1,6 @@
 import streamlit as st
 
-from player_df import PlayerDF
+from models.player_dataset import PlayerDF
 from fm_mapping import (
     MINS, PLAYER_AGE, PLAYER_CLUB, PLAYER_NAME, PLAYER_NAT, PLAYER_POSITION
 )

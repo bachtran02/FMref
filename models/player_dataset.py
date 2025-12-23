@@ -4,9 +4,7 @@ import typing as t
 from fm_mapping import *
 from df_processing import *
 
-class PlayerDF:
-
-    MIN_MINUTES = 450
+class PlayerDataset:
 
     def __init__(self):
         self._raw_df = None
@@ -17,24 +15,24 @@ class PlayerDF:
     def is_empty(self):
         return self._is_empty
 
-    def init_df(self, uploaded_file) -> None:
-        try:
-            assert uploaded_file.name.endswith('.html')
+    def init_dataset(self, uploaded_file, min_minutes=None) -> None:
 
-            dfs = pd.read_html(uploaded_file, encoding='utf8')
-            df = dfs[0]
+        assert uploaded_file.name.endswith('.html'), "Only HTML files are supported for player datasets."
 
-        except:
-            # TODO: handle error here
-            raise NotImplementedError
-        
+        dfs = pd.read_html(uploaded_file, encoding='utf8')
+        assert len(dfs) > 0, "No tables found in the uploaded HTML file."
+
+        df = dfs[0]
         self._raw = df
         self._df = df.copy()
         self._is_empty = False
         
         # preprocess dataframe
         self._df = preprocess_df(self._df)
-        self._df = self._df[self._df[MINS] >= self.MIN_MINUTES]   # filter out players who play fewer than MIN_MINUTES
+
+        if min_minutes is not None:
+            self._df = self._df[self._df[MINS].astype(int) >= min_minutes]
+        
         self._df = parse_player_position(self._df)
 
         # TODO: handle goalkeepers, for now filter out
